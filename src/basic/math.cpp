@@ -1,0 +1,205 @@
+// Copyright (c) 2025 Seong Woo Lee. All rights reserved.
+
+//
+// NOTE: V2
+//
+function V2
+v2(F32 x, F32 y)
+{
+  V2 result;
+  result.x = x;
+  result.y = y;
+  return result;
+}
+
+function V2
+operator +(V2 a, V2 b)
+{
+  V2 result = V2{a.x + b.x, a.y + b.y};
+  return result;
+}
+
+function V2
+operator -(V2 a, V2 b)
+{
+  V2 result = V2{a.x - b.x, a.y - b.y};
+  return result;
+}
+
+function F32
+dot(V2 a, V2 b)
+{
+  F32 result = a.x*b.x + a.y*b.y;
+  return result;
+}
+
+function V2
+hadamard(V2 a, V2 b)
+{
+  V2 result = V2{a.x*b.x, a.y*b.y};
+  return result;
+}
+
+//
+// NOTE: V3
+//
+function V3
+v3(F32 x, F32 y, F32 z)
+{
+  V3 result;
+  result.x = x;
+  result.y = y;
+  result.z = z;
+  return result;
+}
+
+function V3
+operator +(V3 a, V3 b)
+{
+  V3 result = V3{a.x + b.x, a.y + b.y, a.z + b.z};
+  return result;
+}
+
+function V3
+operator -(V3 a, V3 b)
+{
+  V3 result = V3{a.x - b.x, a.y - b.y, a.z - b.z};
+  return result;
+}
+
+function F32
+dot(V3 a, V3 b)
+{
+  F32 result = a.x*b.x + a.y*b.y + a.z*b.z;
+  return result;
+}
+
+function V3
+hadamard(V3 a, V3 b)
+{
+  V3 result = V3{a.x*b.x, a.y*b.y, a.z*b.z};
+  return result;
+}
+
+//
+// NOTE: V4
+//
+function V4
+v4(F32 r, F32 g, F32 b, F32 a)
+{
+  V4 result;
+  result.r = r;
+  result.g = g;
+  result.b = b;
+  result.a = a;
+  return result;
+}
+
+function V4
+operator +(V4 a, V4 b)
+{
+  V4 result = V4{a.x + b.x, a.y + b.y, a.z + b.z, a.z + b.z};
+  return result;
+}
+
+function V4
+operator -(V4 a, V4 b)
+{
+  V4 result = V4{a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w};
+  return result;
+}
+
+function F32
+dot(V4 a, V4 b)
+{
+  F32 result = a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w;
+  return result;
+}
+
+function V4
+hadamard(V4 a, V4 b)
+{
+  V4 result = V4{a.x*b.x, a.y*b.y, a.z*b.z, a.w*b.w};
+  return result;
+}
+
+//
+// NOTE: M4x4
+//
+function M4x4
+operator *(M4x4 a, M4x4 b)
+{
+  M4x4 result = {};
+  for (S32 r = 0; r < 4; ++r)
+    for (S32 c = 0; c < 4; ++c)
+      for (S32 i = 0; i < 4; ++i) 
+      { result.e[r][c] = a.e[r][i] * b.e[c][i]; }
+  return result;
+}
+
+function M4x4
+identity4x4(void)
+{
+  M4x4 result =
+  {{
+     1, 0, 0, 0,
+     0, 1, 0, 0,
+     0, 0, 1, 0,
+     0, 0, 0, 1
+   }};
+  return result;
+}
+
+function M4x4
+translate4x4(M4x4 m, V3 v)
+{
+  M4x4 result = m;
+  result.e[0][3] += v.x;
+  result.e[1][3] += v.y;
+  result.e[2][3] += v.z;
+  return result;
+}
+
+function M4x4
+scale4x4(M4x4 m, F32 f)
+{
+  M4x4 result = m;
+  result.e[0][0] *= f;
+  result.e[1][1] *= f;
+  result.e[2][2] *= f;
+  return result;
+}
+
+//
+// NOTE: Trigonometry
+//
+function F32
+sin32(F32 f)
+{
+  F32 result = (F32)sin(f);
+  return result;
+}
+
+function F32
+cos32(F32 f)
+{
+  F32 result = (F32)cos(f);
+  return result;
+}
+
+function F32
+tan32(F32 f)
+{
+  F32 result = (F32)tan(f);
+  return result;
+}
+
+//
+// NOTE: Round
+//
+function S32 
+round_f32_to_s32(F32 x)
+{
+  S32 result = (S32)(x + 0.5f);
+  return result;
+}
