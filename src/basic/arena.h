@@ -1,31 +1,30 @@
 // Copyright (c) 2025 Seong Woo Lee. All rights reserved.
+#ifndef LSW_ARENA_H
+#define LSW_ARENA_H
 
-#ifndef SWL_ARENA_H
-#define SWL_ARENA_H
-
-#define ARENA_DEFAULT_RESERVE_SIZE  MB(64)
+#define ARENA_DEFAULT_RESERVE_SIZE  megabytes(64)
 // #define ARENA_DEFAULT_COMMIT_SIZE   KB(64)
 #define ARENA_HEADER_ALIGNED_SIZE 48
 
 typedef struct Arena Arena;
 struct Arena
 {
-  U8 *base;
-  U64 size;
-  U64 used;
+    U8 *base;
+    U64 size;
+    U64 used;
 
-  Arena *next;
-  Arena *prev;
+    Arena *next;
+    Arena *prev;
 
-  Arena *current;
+    Arena *current;
 };
 static_assert(sizeof(Arena) <= ARENA_HEADER_ALIGNED_SIZE);
 
 typedef struct Temporary_Arena Temporary_Arena;
 struct Temporary_Arena
 {
-  Arena *arena;
-  U64 used;
+    Arena *arena;
+    U64 used;
 };
 
 
@@ -42,4 +41,4 @@ function void *push_size(Arena *arena, U64 size);
 function Temporary_Arena scratch_begin(void);
 function void scratch_end(Temporary_Arena tmp);
 
-#endif // SWL_ARENA_H
+#endif // LSW_ARENA_H

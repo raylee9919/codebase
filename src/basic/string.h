@@ -1,7 +1,7 @@
 // Copyright (c) 2025 Seong Woo Lee. All rights reserved.
 
-#ifndef SWL_STRING_H
-#define SWL_SRRING_H
+#ifndef LSW_STRING_H
+#define LSW_SRRING_H
 
 typedef struct String8 String8;
 struct String8 
@@ -51,4 +51,4 @@ function U32 utf16_from_codepoint(U16 *out, U32 codepoint);
 function String16 string16_from_string8(Arena *arena, String8 str8);
 
 
-#endif // SWL_STRING_H
+#endif // LSW_STRING_H

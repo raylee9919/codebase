@@ -1,7 +1,7 @@
 // Copyright (c) 2025 Seong Woo Lee. All rights reserved.
 
-#ifndef SWL_OS_H
-#define SWL_OS_H
+#ifndef LSW_OS_H
+#define LSW_OS_H
 
 struct String8;
 struct String16;
@@ -11,16 +11,16 @@ struct Arena;
 typedef struct Os_Handle Os_Handle;
 struct Os_Handle
 {
-  U64 u64;
+    U64 u64;
 };
 
 typedef U32 Os_File_Access_Flags;
 enum
 {
-  OS_FILE_ACCESS_READ       = (1<<0),
-  OS_FILE_ACCESS_WRITE      = (1<<1),
-  OS_FILE_ACCESS_SHARED     = (1<<2),
-  OS_FILE_ACCESS_CREATE_NEW = (1<<3),
+    OS_FILE_ACCESS_READ       = (1<<0),
+    OS_FILE_ACCESS_WRITE      = (1<<1),
+    OS_FILE_ACCESS_SHARED     = (1<<2),
+    OS_FILE_ACCESS_CREATE_NEW = (1<<3),
 };
 
 // NOTE: OS Macro Magic.
@@ -57,26 +57,26 @@ typedef OS_FUNCTION_READ_TIMER(Os_Function_Read_Timer);
 typedef struct Os_State Os_State;
 struct Os_State
 {
-  Os_Function_Get_Page_Size *get_page_size;
-  Os_Function_Get_Logical_Processor_Count *get_logical_processor_count;
+    Os_Function_Get_Page_Size *get_page_size;
+    Os_Function_Get_Logical_Processor_Count *get_logical_processor_count;
 
-  Os_Function_Show_Message *show_message;
-  Os_Function_Abort *abort;
+    Os_Function_Show_Message *show_message;
+    Os_Function_Abort *abort;
 
-  Os_Function_Reserve   *reserve;
-  Os_Function_Release   *release;
-  Os_Function_Commit    *commit;
-  Os_Function_Decommit  *decommit;
+    Os_Function_Reserve   *reserve;
+    Os_Function_Release   *release;
+    Os_Function_Commit    *commit;
+    Os_Function_Decommit  *decommit;
 
-  Os_Function_Open_File       *open_file;
-  Os_Function_Close_File      *close_file;
-  Os_Function_Get_File_Size   *get_file_size;
-  Os_Function_Read_File       *read_file;
+    Os_Function_Open_File       *open_file;
+    Os_Function_Close_File      *close_file;
+    Os_Function_Get_File_Size   *get_file_size;
+    Os_Function_Read_File       *read_file;
 
-  Os_Function_Read_Timer *read_timer;
-  F32 timer_frequency;
+    Os_Function_Read_Timer *read_timer;
+    F32 timer_frequency;
 };
 
 global Os_State os;
 
-#endif // SWL_OS_H
+#endif // LSW_OS_H

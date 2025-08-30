@@ -1,7 +1,7 @@
 // Copyright (c) 2025 Seong Woo Lee. All rights reserved.
 
-#ifndef SWL_IMAGE_H
-#define SWL_IMAGE_H
+#ifndef LSW_IMAGE_H
+#define LSW_IMAGE_H
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_ASSERT(x)
@@ -23,4 +23,4 @@ struct Bitmap
 function Bitmap image_load(Arena *arena, String8 file_path);
 
 
-#endif // SWL_IMAGE_H
+#endif // LSW_IMAGE_H

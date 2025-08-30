@@ -3,5 +3,5 @@
 function void
 thread_init(void)
 {
-  tctx.scratch_arena = arena_alloc(KB(256));
+    tctx.scratch_arena = arena_alloc(kilobytes(256));
 }

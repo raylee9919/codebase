@@ -1,35 +1,35 @@
 // Copyright (c) 2025 Seong Woo Lee. All rights reserved.
 
-#ifndef SWL_MATH_H
-#define SWL_MATH_H
+#ifndef LSW_MATH_H
+#define LSW_MATH_H
 
 typedef union V2 V2;
 union V2
 {
-  struct {F32 x, y; };
-  F32 e[2];
+    struct {F32 x, y; };
+    F32 e[2];
 };
 
 typedef union V3 V3;
 union V3
 {
-  struct { F32 x, y, z; };
-  struct { F32 r, g, b; };
-  F32 e[3];
+    struct { F32 x, y, z; };
+    struct { F32 r, g, b; };
+    F32 e[3];
 };
 
 typedef union V4 V4;
 union V4
 {
-  struct { F32 r, g, b, a; };
-  struct { F32 x, y, z, w; };
-  F32 e[4];
+    struct { F32 r, g, b, a; };
+    struct { F32 x, y, z, w; };
+    F32 e[4];
 };
 
 typedef struct M4x4 M4x4;
 struct M4x4
 {
-  F32 e[4][4];
+    F32 e[4][4];
 };
 
 
@@ -71,4 +71,4 @@ function S32 round_f32_to_s32(F32);
 
 
 
-#endif // SWL_MATH_H
+#endif // LSW_MATH_H

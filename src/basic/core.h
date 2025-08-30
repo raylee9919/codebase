@@ -1,7 +1,7 @@
 // Copyright (c) 2025 Seong Woo Lee. All rights reserved.
 
-#ifndef SWL_CORE_H
-#define SWL_CORE_H
+#ifndef LSW_CORE_H
+#define LSW_CORE_H
 
 struct Arena;
 struct String8;
@@ -47,10 +47,10 @@ typedef struct { U64 u64[2]; } U128;
 #define clamp_high(x, hi) min(x, hi)
 #define clamp_low(x, lo)  max(x, lo)
 
-#define KB(value) (   value  * 1024ll)
-#define MB(value) (KB(value) * 1024ll)
-#define GB(value) (MB(value) * 1024ll)
-#define TB(value) (GB(value) * 1024ll)
+#define kilobytes(x) (x * 1024ll)
+#define megabytes(x) (kilobytes(x) * 1024ll)
+#define gigabytes(x) (megabytes(x) * 1024ll)
+#define terabytes(x) (gigabytes(x) * 1024ll)
 
 #define U8_MAX  (255)
 #define U16_MAX (65535)
@@ -62,4 +62,4 @@ typedef struct { U64 u64[2]; } U128;
 function String8 read_entire_file(Arena *arena, String16 file_path);
 
 
-#endif // SWL_CORE_H
+#endif // LSW_CORE_H
