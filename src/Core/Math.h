@@ -10,6 +10,13 @@ union V2
     F32 e[2];
 };
 
+typedef union V2U V2U;
+union V2U
+{
+    struct {U32 x, y; };
+    U32 e[2];
+};
+
 typedef union V3 V3;
 union V3
 {

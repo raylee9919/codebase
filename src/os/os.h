@@ -24,6 +24,7 @@ enum
 
 // @Note: OS Macro Magic.
 #define OS_CREATE_WINDOW(name)               Os_Handle name(Os_Handle instance)
+#define OS_GET_CLIENT_SIZE(name)             V2U name(Os_Handle window)
 #define OS_GET_PAGE_SIZE(name)               U64 name(void)
 #define OS_GET_LOGICAL_PROCESSOR_COUNT(name) U32 name(void)
 #define OS_SHOW_MESSAGE(name)                void name(String16 msg)
@@ -40,6 +41,7 @@ enum
 
 // @Note: OS Typedef Magic.
 typedef OS_CREATE_WINDOW(Os_Create_Window);
+typedef OS_GET_CLIENT_SIZE(Os_Get_Client_Size);
 typedef OS_GET_PAGE_SIZE(Os_Get_Page_Size);
 typedef OS_GET_LOGICAL_PROCESSOR_COUNT(Os_Get_Logical_Processor_Count);
 typedef OS_SHOW_MESSAGE(Os_Show_Message);
@@ -59,6 +61,7 @@ typedef struct Os_State Os_State;
 struct Os_State
 {
     Os_Create_Window                *create_window;
+    Os_Get_Client_Size              *get_client_size;
 
     Os_Get_Page_Size                *get_page_size;
     Os_Get_Logical_Processor_Count  *get_logical_processor_count;

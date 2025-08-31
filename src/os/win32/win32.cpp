@@ -63,6 +63,18 @@ OS_CREATE_WINDOW(win32_create_window)
 }
 
 function
+OS_GET_CLIENT_SIZE(win32_get_client_size)
+{
+    V2U result = {};
+    HWND hwnd = (HWND)window.u64;
+    RECT rect = {};
+    GetClientRect(hwnd, &rect);
+    result.x = rect.right - rect.left;
+    result.y = rect.bottom - rect.top;
+    return result;
+}
+
+function
 OS_SHOW_MESSAGE(win32_show_message)
 {
 #if 0
@@ -267,6 +279,7 @@ function void
 win32_init(void)
 {
     os.create_window                  = win32_create_window;
+    os.get_client_size                = win32_get_client_size;
     os.get_page_size                  = win32_get_page_size;
     os.get_logical_processor_count    = win32_get_logical_processor_count;
     os.abort                          = win32_abort;
