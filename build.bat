@@ -31,5 +31,5 @@ set libs=User32.lib Dwmapi.lib Gdi32.lib D3D11.lib Dwrite.lib D3DCompiler.lib
 if not exist build mkdir build
 pushd build
 ::call cl ..\src\main.cpp %flags_compile% /link %flags_linker% %libs%
-call cl ..\src\entry.cpp %flags_compile% /link %flags_linker% %libs%
+call cl ..\src\main.cpp %flags_compile% /link %flags_linker% %libs%
 popd

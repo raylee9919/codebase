@@ -9,6 +9,7 @@ struct Thread_Context
 };
 
 function void thread_init(void);
+function void thread_main_init(void);
 
 thread_local Thread_Context tctx;
 

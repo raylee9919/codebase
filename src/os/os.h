@@ -90,12 +90,14 @@ function int main_entry(void); // User code space forward declaration.
    int main(int argc, char **argv)
    {
        win32_init();
+       thread_main_init();
        main_entry();
    }
 #  else
    int WINAPI wWinMain(HINSTANCE hinst, HINSTANCE hinst_prev, PWSTR cmdline, int cmdshow)
    {
        win32_init();
+       thread_main_init();
        main_entry();
    }
 #  endif
