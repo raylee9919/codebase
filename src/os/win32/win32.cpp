@@ -1,5 +1,8 @@
 // Copyright (c) 2025 Seong Woo Lee. All rights reserved.
-
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#define UNICODE
+#define _UNICODE
 #include <windows.h>
 
 function LRESULT CALLBACK
