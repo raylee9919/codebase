@@ -61,41 +61,38 @@ typedef OS_READ_FILE(Os_Read_File);
 typedef OS_READ_TIMER(Os_Read_Timer);
 typedef OS_QUERY_TIMER_FREQUENCY(Os_Query_Timer_Frequency);
 
-typedef struct OS OS;
-struct OS
-{
-    Os_Create_Window                *create_window;
-    Os_Get_Client_Size              *get_client_size;
+// -------------------------------------------------------------
+// Note: Function Pointers
+Os_Create_Window                *os_create_window;
+Os_Get_Client_Size              *os_get_client_size;
 
-    Os_Create_Thread                *create_thread;
-    Os_Join_Thread                  *join_thread;
+Os_Create_Thread                *os_create_thread;
+Os_Join_Thread                  *os_join_thread;
 
-    Os_Get_Page_Size                *get_page_size;
-    Os_Get_Logical_Processor_Count  *get_logical_processor_count;
+Os_Get_Page_Size                *os_get_page_size;
+Os_Get_Logical_Processor_Count  *os_get_logical_processor_count;
 
-    Os_Gui_Message                  *gui_message;
-    Os_Abort                        *abort;
+Os_Gui_Message                  *os_gui_message;
+Os_Abort                        *os_abort;
 
-    Os_Reserve                      *reserve;
-    Os_Release                      *release;
-    Os_Commit                       *commit;
-    Os_Decommit                     *decommit;
+Os_Reserve                      *os_reserve;
+Os_Release                      *os_release;
+Os_Commit                       *os_commit;
+Os_Decommit                     *os_decommit;
 
-    Os_Open_File                    *open_file;
-    Os_Close_File                   *close_file;
-    Os_Get_File_Size                *get_file_size;
-    Os_Read_File                    *read_file;
+Os_Open_File                    *os_open_file;
+Os_Close_File                   *os_close_file;
+Os_Get_File_Size                *os_get_file_size;
+Os_Read_File                    *os_read_file;
 
-    Os_Read_Timer                   *read_timer;
-    Os_Query_Timer_Frequency        *query_timer_frequency;
-};
-global OS os;
+Os_Read_Timer                   *os_read_timer;
+Os_Query_Timer_Frequency        *os_query_timer_frequency;
 
 
 #ifdef BUILD_CLI
   function int main_entry(int argc, char **argv);
 #else
-  function int main_entry(Os_Handle instance);
+  function int main_entry(void);
 #endif
 
 

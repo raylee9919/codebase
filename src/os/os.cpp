@@ -18,12 +18,9 @@
         win32_init(hinst);
         thread_init();
 
-        Os_Handle instance = {};
+        Os_Handle main_thread = os_create_thread(thread_main_entry, NULL);
 
-        instance.u64 = (U64)hinst;
-        Os_Handle main_thread = os.create_thread(thread_main_entry, &instance);
-
-        os.join_thread(main_thread);
+        os_join_thread(main_thread);
 
         return 0;
     }

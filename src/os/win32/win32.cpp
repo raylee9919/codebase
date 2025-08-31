@@ -306,24 +306,24 @@ OS_QUERY_TIMER_FREQUENCY(win32_query_timer_frequency)
 function void
 win32_init(HINSTANCE hinst)
 {
-    os.create_window                  = win32_create_window;
-    os.get_client_size                = win32_get_client_size;
-    os.create_thread                  = win32_create_thread;
-    os.join_thread                    = win32_join_thread;
-    os.get_page_size                  = win32_get_page_size;
-    os.get_logical_processor_count    = win32_get_logical_processor_count;
-    os.gui_message                    = win32_gui_message;
-    os.abort                          = win32_abort;
-    os.reserve                        = win32_reserve;
-    os.release                        = win32_release;
-    os.commit                         = win32_commit;
-    os.decommit                       = win32_decommit;
-    os.open_file                      = win32_open_file;
-    os.close_file                     = win32_close_file;
-    os.get_file_size                  = win32_get_file_size;
-    os.read_file                      = win32_read_file;
-    os.read_timer                     = win32_read_timer;
-    os.query_timer_frequency          = win32_query_timer_frequency;
+    os_create_window                  = win32_create_window;
+    os_get_client_size                = win32_get_client_size;
+    os_create_thread                  = win32_create_thread;
+    os_join_thread                    = win32_join_thread;
+    os_get_page_size                  = win32_get_page_size;
+    os_get_logical_processor_count    = win32_get_logical_processor_count;
+    os_gui_message                    = win32_gui_message;
+    os_abort                          = win32_abort;
+    os_reserve                        = win32_reserve;
+    os_release                        = win32_release;
+    os_commit                         = win32_commit;
+    os_decommit                       = win32_decommit;
+    os_open_file                      = win32_open_file;
+    os_close_file                     = win32_close_file;
+    os_get_file_size                  = win32_get_file_size;
+    os_read_file                      = win32_read_file;
+    os_read_timer                     = win32_read_timer;
+    os_query_timer_frequency          = win32_query_timer_frequency;
 
     win32_state.arena = arena_alloc();
     win32_state.hinst = hinst;

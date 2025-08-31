@@ -18,7 +18,7 @@
 function U64
 get_page_aligned_size(U64 size)
 {
-    U64 page_size = os.get_page_size();
+    U64 page_size = os_get_page_size();
     U64 result= align_pow2(size, page_size);
     return result;
 }
@@ -31,7 +31,7 @@ arena_alloc(U64 size = ARENA_DEFAULT_RESERVE_SIZE)
 
     B32 commit_now = true;
 
-    void *ptr = os.reserve(actual_size, commit_now); // IMPORTANT: spec'ed to pass page-aligned size.
+    void *ptr = os_reserve(actual_size, commit_now); // IMPORTANT: spec'ed to pass page-aligned size.
     Arena *result = (Arena *)ptr;
     {
         result->base     = (U8 *)ptr + ARENA_HEADER_ALIGNED_SIZE;
@@ -53,7 +53,7 @@ arena_dealloc(Arena *arena)
     {
         void *ptr = node;
         node = node->prev;
-        os.release(ptr);
+        os_release(ptr);
     }
 }
 

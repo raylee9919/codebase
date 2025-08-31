@@ -11,6 +11,5 @@ thread_main_entry(void *param)
 {
     thread_init();
 
-    Os_Handle instance = *(Os_Handle *)param;
-    main_entry(instance);
+    main_entry();
 }
