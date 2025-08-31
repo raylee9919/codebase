@@ -7,8 +7,6 @@
 #include "Core/Thread.cpp"
 #include "Core/String.cpp"
 #include "Core/Math.cpp"
-#include "Ds/List.cpp"
-#include "Ds/Hash_Table.cpp"
 #include "image/image.cpp"
 #include "render/backend/d3d11.cpp"
 

@@ -3,13 +3,13 @@
 #define LSW_INCLUDE_H
 
 // Note: [.h]
-#include "Core/Core.h"
-#include "Core/Arena.h"
-#include "Core/String.h"
-#include "Core/Thread.h"
-#include "Core/Math.h"
-#include "Ds/List.h"
-#include "Ds/Hash_Table.h"
+#include "core/Core.h"
+#include "core/Arena.h"
+#include "core/String.h"
+#include "core/Thread.h"
+#include "core/Math.h"
+#include "ds/List.h"
+#include "ds/Hash_Table.h"
 #include "os/os.h"
 #include "image/image.h"
 #include "render/backend/d3d11.h"

@@ -1,5 +1,4 @@
 // Copyright (c) 2025 Seong Woo Lee. All rights reserved.
-
 #ifndef LSW_CORE_H
 #define LSW_CORE_H
 
@@ -35,11 +34,13 @@ typedef struct { U64 u64[2]; } U128;
 
 
 // @Note: Macro-Functions
-#define assert(exp) do { if (!(exp))  __debugbreak(); } while (0)
+#define assert(exp) do { if (!(exp)) *(volatile int *)0 = 0; } while (0)
 #define assume(exp) assert(exp)
 #define array_count(arr) (sizeof(arr) / sizeof(arr[0]))
 #define max(a, b) ((a) > (b) ? (a) : (b))
 #define min(a, b) ((a) < (b) ? (a) : (b))
+#define offset_of(type, member) (&((type *)0->member))
+#define base_from_member(type, member_name, ptr) (type *)((U8 *)(ptr) - offset_of(type, member_name))
 #define defer_loop(start, end)          for(int _i_ = ((start), 0); _i_ == 0; (_i_ += 1, (end)))
 #define defer_loop_checked(begin, end)  for(int _i_ = 2 * !(begin); (_i_ == 2 ? ((end), 0) : !_i_); _i_ += 1, (end))
 #define align_pow2(x,b)                 (((x) + (b) - 1)&(~((b) - 1)))
@@ -47,6 +48,7 @@ typedef struct { U64 u64[2]; } U128;
 #define clamp(x, lo, hi)  min(max(x, lo), hi)
 #define clamp_high(x, hi) min(x, hi)
 #define clamp_low(x, lo)  max(x, lo)
+#define is_pow2(x) (((x) & ((x)-1)) == 0)
 
 #define kilobytes(x) (x * 1024ll)
 #define megabytes(x) (kilobytes(x) * 1024ll)
@@ -57,6 +59,14 @@ typedef struct { U64 u64[2]; } U128;
 #define U16_MAX (65535)
 #define U32_MAX (4294967295)
 #define U64_MAX (18446744073709551615)
+
+#define quick_sort(base, type, count, compare_function) qsort((base), (count), sizeof(type), (int(*)(const void *, const void *))(compare_function))
+
+// @Note: Memory Operations
+#define memory_copy(dst, src, size) memcpy((dst), (src), (size))
+#define memory_move(dst, src, size) memmove((dst), (src), (size))
+#define memory_set(dst, byte, size) memset((dst), (byte), (size))
+#define memory_zero(ptr, size) memory_set((ptr), 0, (size))
 
 
 // @Note: Functions.

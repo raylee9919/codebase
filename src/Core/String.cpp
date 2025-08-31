@@ -34,6 +34,18 @@ length_cstring(char *cstr)
     return result;
 }
 
+// @Todo: Better?
+function B32
+string8_equal(U8 *a, U8 *b, U64 len)
+{
+    for (U64 i = 0; i < len; ++i)
+    {
+        if (a[i] != b[i])
+        { return false; }
+    }
+    return true;
+}
+
 //
 // NOTE: String Constructors
 //
