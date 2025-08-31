@@ -18,7 +18,7 @@ struct D3D11
 };
 global D3D11 d3d11;
 
-function B32 d3d11_init(D3D11 *d3d11, HWND window_handle);
-function B32 d3d11_create_swapchain_and_framebuffer(D3D11 *d3d11, HWND window_handle);
+function B32 d3d11_init(HWND window_handle);
+function B32 d3d11_create_swapchain_and_framebuffer(HWND window_handle);
 
 #endif // LSW_D3D11_H

@@ -1,7 +1,7 @@
 // Copyright (c) 2025 Seong Woo Lee. All rights reserved.
 
 function B32
-d3d11_init(D3D11 *d3d11, HWND window_handle)
+d3d11_init(HWND window_handle)
 {
     // NOTE: Init D3D11 device and context.
     ID3D11Device *base_device;
@@ -24,12 +24,12 @@ d3d11_init(D3D11 *d3d11, HWND window_handle)
     { return false; }
 
     // NOTE: Query interfaces from device and device-context.
-    if (FAILED(base_device->QueryInterface(__uuidof(ID3D11Device1), (void **)&d3d11->device)))
+    if (FAILED(base_device->QueryInterface(__uuidof(ID3D11Device1), (void **)&d3d11.device)))
     { return false; }
 
     base_device->Release();
 
-    if (FAILED(base_device_ctx->QueryInterface(__uuidof(ID3D11DeviceContext1), (void**)&d3d11->device_ctx)))
+    if (FAILED(base_device_ctx->QueryInterface(__uuidof(ID3D11DeviceContext1), (void**)&d3d11.device_ctx)))
     { return false; }
 
     base_device_ctx->Release();
@@ -37,7 +37,7 @@ d3d11_init(D3D11 *d3d11, HWND window_handle)
     // NOTE: Set up debug layer to break on D3D11 errors.
 #if BUILD_DEBUG
     ID3D11Debug *d3d11_debug = NULL;
-    d3d11->device->QueryInterface(__uuidof(ID3D11Debug), (void**)&d3d11_debug);
+    d3d11.device->QueryInterface(__uuidof(ID3D11Debug), (void**)&d3d11_debug);
     if (!d3d11_debug)
     { return false; }
     ID3D11InfoQueue *d3d11_info_queue = NULL;
@@ -50,19 +50,19 @@ d3d11_init(D3D11 *d3d11, HWND window_handle)
 #endif
 
     // NOTE: Create swapchain and framebuffer.
-    if (!d3d11_create_swapchain_and_framebuffer(d3d11, window_handle))
+    if (!d3d11_create_swapchain_and_framebuffer(window_handle))
     { return false; }
 
     return true;
 }
 
 function B32
-d3d11_create_swapchain_and_framebuffer(D3D11 *d3d11, HWND window_handle)
+d3d11_create_swapchain_and_framebuffer(HWND window_handle)
 {
     // NOTE: Create Swapchain
     IDXGIFactory2 *dxgi_factory;
     IDXGIDevice1 *dxgi_device;
-    if (FAILED(d3d11->device->QueryInterface(__uuidof(IDXGIDevice1), (void**)&dxgi_device)))
+    if (FAILED(d3d11.device->QueryInterface(__uuidof(IDXGIDevice1), (void**)&dxgi_device)))
     { return false; }
 
     IDXGIAdapter *dxgi_adapter;
@@ -97,7 +97,7 @@ d3d11_create_swapchain_and_framebuffer(D3D11 *d3d11, HWND window_handle)
         d3d11_swapchain_desc.Flags              = 0;
     }
 
-    if (FAILED(dxgi_factory->CreateSwapChainForHwnd(d3d11->device, window_handle, &d3d11_swapchain_desc, 0, 0, &d3d11->swapchain)))
+    if (FAILED(dxgi_factory->CreateSwapChainForHwnd(d3d11.device, window_handle, &d3d11_swapchain_desc, 0, 0, &d3d11.swapchain)))
     { return false; }
 
     dxgi_factory->Release();
@@ -105,10 +105,10 @@ d3d11_create_swapchain_and_framebuffer(D3D11 *d3d11, HWND window_handle)
     // NOTE: Create framebuffer render target
     ID3D11Texture2D *d3d11_framebuffer;
 
-    if (FAILED(d3d11->swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void **)&d3d11_framebuffer)))
+    if (FAILED(d3d11.swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void **)&d3d11_framebuffer)))
     { return false; }
 
-    if (FAILED(d3d11->device->CreateRenderTargetView(d3d11_framebuffer, 0, &d3d11->framebuffer_view)))
+    if (FAILED(d3d11.device->CreateRenderTargetView(d3d11_framebuffer, 0, &d3d11.framebuffer_view)))
     { return false; }
 
     d3d11_framebuffer->Release();
