@@ -5,25 +5,6 @@
 
 global B32 g_running = true;
 
-LRESULT CALLBACK
-win32_window_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
-{
-    LRESULT result = {};
-
-    switch(msg) 
-    {
-        case WM_DESTROY: {
-            PostQuitMessage(0);
-        } break;
-
-        default: {
-            result = DefWindowProcW(hwnd, msg, wparam, lparam);
-        } break;
-    }
-
-    return result;
-}
-
 function int
 main_entry(Os_Handle hinst)
 {

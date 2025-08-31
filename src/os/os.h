@@ -23,23 +23,23 @@ enum
 
 typedef void Os_Thread_Proc(void *);
 
-#define OS_CREATE_WINDOW(name)               Os_Handle name(Os_Handle instance, String16 title)
-#define OS_GET_CLIENT_SIZE(name)             V2U name(Os_Handle window)
-#define OS_JOIN_THREAD(name)                 void name(Os_Handle thread)
-#define OS_CREATE_THREAD(name)               Os_Handle name(Os_Thread_Proc *proc, void *param)
-#define OS_GET_PAGE_SIZE(name)               U64 name(void)
-#define OS_GET_LOGICAL_PROCESSOR_COUNT(name) U32 name(void)
-#define OS_SHOW_MESSAGE(name)                void name(String16 msg)
-#define OS_ABORT(name)                       void name(void)
-#define OS_RESERVE(name)                     void *name(U64 size, B32 commit)
-#define OS_RELEASE(name)                     void name(void *ptr)
-#define OS_COMMIT(name)                      void name(void *ptr, U64 size)
-#define OS_DECOMMIT(name)                    void name(void *ptr, U64 size)
-#define OS_OPEN_FILE(name)                   Os_Handle name(String8 path, Os_File_Access_Flags flags)
-#define OS_CLOSE_FILE(name)                  void name(Os_Handle file)
-#define OS_GET_FILE_SIZE(name)               U64 name(Os_Handle file)
-#define OS_READ_FILE(name)                   String8 name(Arena *arena, Os_Handle file, U64 size)
-#define OS_READ_TIMER(name)                  U64 name(void)
+#define OS_CREATE_WINDOW(name)                  Os_Handle name(Os_Handle instance, String16 title)
+#define OS_GET_CLIENT_SIZE(name)                V2U name(Os_Handle window)
+#define OS_JOIN_THREAD(name)                    void name(Os_Handle thread)
+#define OS_CREATE_THREAD(name)                  Os_Handle name(Os_Thread_Proc *proc, void *param)
+#define OS_GET_PAGE_SIZE(name)                  U64 name(void)
+#define OS_GET_LOGICAL_PROCESSOR_COUNT(name)    U32 name(void)
+#define OS_GUI_MESSAGE(name)                    void name(String16 msg)
+#define OS_ABORT(name)                          void name(void)
+#define OS_RESERVE(name)                        void *name(U64 size, B32 commit)
+#define OS_RELEASE(name)                        void name(void *ptr)
+#define OS_COMMIT(name)                         void name(void *ptr, U64 size)
+#define OS_DECOMMIT(name)                       void name(void *ptr, U64 size)
+#define OS_OPEN_FILE(name)                      Os_Handle name(String8 path, Os_File_Access_Flags flags)
+#define OS_CLOSE_FILE(name)                     void name(Os_Handle file)
+#define OS_GET_FILE_SIZE(name)                  U64 name(Os_Handle file)
+#define OS_READ_FILE(name)                      String8 name(Arena *arena, Os_Handle file, U64 size)
+#define OS_READ_TIMER(name)                     U64 name(void)
 
 typedef OS_CREATE_WINDOW(Os_Create_Window);
 typedef OS_GET_CLIENT_SIZE(Os_Get_Client_Size);
@@ -47,7 +47,7 @@ typedef OS_JOIN_THREAD(Os_Join_Thread);
 typedef OS_CREATE_THREAD(Os_Create_Thread);
 typedef OS_GET_PAGE_SIZE(Os_Get_Page_Size);
 typedef OS_GET_LOGICAL_PROCESSOR_COUNT(Os_Get_Logical_Processor_Count);
-typedef OS_SHOW_MESSAGE(Os_Show_Message);
+typedef OS_GUI_MESSAGE(Os_Gui_Message);
 typedef OS_ABORT(Os_Abort);
 typedef OS_RESERVE(Os_Reserve);
 typedef OS_RELEASE(Os_Release);
@@ -72,7 +72,7 @@ struct OS
     Os_Get_Page_Size                *get_page_size;
     Os_Get_Logical_Processor_Count  *get_logical_processor_count;
 
-    Os_Show_Message                 *show_message;
+    Os_Gui_Message                  *gui_message;
     Os_Abort                        *abort;
 
     Os_Reserve                      *reserve;

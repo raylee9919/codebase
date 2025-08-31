@@ -7,9 +7,25 @@
 
 #pragma comment(lib, "kernel32")
 #pragma comment(lib, "user32")
-#pragma comment(lib, "gdi32")
 
-LRESULT CALLBACK win32_window_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+LRESULT CALLBACK
+win32_window_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+{
+    LRESULT result = {};
+
+    switch(msg) 
+    {
+        case WM_DESTROY: {
+            PostQuitMessage(0);
+        } break;
+
+        default: {
+            result = DefWindowProcW(hwnd, msg, wparam, lparam);
+        } break;
+    }
+
+    return result;
+}
 
 function
 OS_CREATE_WINDOW(win32_create_window)
@@ -96,7 +112,7 @@ OS_JOIN_THREAD(win32_join_thread)
 }
 
 function
-OS_SHOW_MESSAGE(win32_show_message)
+OS_GUI_MESSAGE(win32_gui_message)
 {
 #if 0
     LPCWSTR caption = L"This is caption";
@@ -277,16 +293,6 @@ OS_READ_TIMER(win32_read_timer)
     return result;
 }
 
-function void
-win32_show_message_and_abort(HWND hwnd, LPCWSTR msg)
-{
-#if 0
-    LPCWSTR caption = L"This app is abandoned.";
-    UINT message_box_type = MB_ICONSTOP;
-    MessageBoxExW(hwnd, msg, caption, message_box_type, 0);
-#endif
-}
-
 function U64
 win32_query_timer_frequency(void)
 {
@@ -305,6 +311,7 @@ win32_init(void)
     os.join_thread                    = win32_join_thread;
     os.get_page_size                  = win32_get_page_size;
     os.get_logical_processor_count    = win32_get_logical_processor_count;
+    os.gui_message                    = win32_gui_message;
     os.abort                          = win32_abort;
     os.reserve                        = win32_reserve;
     os.release                        = win32_release;

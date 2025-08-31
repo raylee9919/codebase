@@ -9,6 +9,8 @@
         win32_init();
         thread_init();
         main_entry(argc, argv);
+
+        return 0;
     }
 #  else
     int WINAPI wWinMain(HINSTANCE hinst, HINSTANCE hinst_prev, PWSTR cmdline, int cmdshow)
@@ -17,10 +19,13 @@
         thread_init();
 
         Os_Handle instance = {};
-        instance.u64 = (U64)hinst;
 
-        Os_Handle hthread = os.create_thread(thread_main_entry, &instance);
-        os.join_thread(hthread);
+        instance.u64 = (U64)hinst;
+        Os_Handle main_thread = os.create_thread(thread_main_entry, &instance);
+
+        os.join_thread(main_thread);
+
+        return 0;
     }
 #  endif
 #else
