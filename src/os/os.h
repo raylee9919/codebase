@@ -23,7 +23,7 @@ enum
 };
 
 // @Note: OS Macro Magic.
-#define OS_CREATE_WINDOW(name)               Os_Handle name(Os_Handle instance)
+#define OS_CREATE_WINDOW(name)               Os_Handle name(Os_Handle instance, String16 title)
 #define OS_GET_CLIENT_SIZE(name)             V2U name(Os_Handle window)
 #define OS_GET_PAGE_SIZE(name)               U64 name(void)
 #define OS_GET_LOGICAL_PROCESSOR_COUNT(name) U32 name(void)

@@ -52,7 +52,7 @@ OS_CREATE_WINDOW(win32_create_window)
 
     if (RegisterClassW(&wcex))
     {
-        HWND hwnd = CreateWindowExW(0/*style->DWORD*/, wcex.lpszClassName, L"Window",
+        HWND hwnd = CreateWindowExW(0/*style->DWORD*/, wcex.lpszClassName, (WCHAR *)title.str,
                                     WS_OVERLAPPEDWINDOW|WS_VISIBLE,
                                     CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
                                     NULL, NULL, hinst, NULL);
