@@ -25,7 +25,7 @@ win32_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 }
 
 function
-OS_FUNCTION_SHOW_MESSAGE(win32_show_message)
+OS_SHOW_MESSAGE(win32_show_message)
 {
 #if 0
     LPCWSTR caption = L"This is caption";
@@ -38,7 +38,7 @@ OS_FUNCTION_SHOW_MESSAGE(win32_show_message)
 // Note: System Info.
 //
 function
-OS_FUNCTION_GET_PAGE_SIZE(win32_get_page_size)
+OS_GET_PAGE_SIZE(win32_get_page_size)
 {
     SYSTEM_INFO info;
     GetSystemInfo(&info);
@@ -46,7 +46,7 @@ OS_FUNCTION_GET_PAGE_SIZE(win32_get_page_size)
 }
 
 function
-OS_FUNCTION_GET_LOGICAL_PROCESSOR_COUNT(win32_get_logical_processor_count)
+OS_GET_LOGICAL_PROCESSOR_COUNT(win32_get_logical_processor_count)
 {
     SYSTEM_INFO info;
     GetSystemInfo(&info);
@@ -56,7 +56,7 @@ OS_FUNCTION_GET_LOGICAL_PROCESSOR_COUNT(win32_get_logical_processor_count)
 
 // Note: Abort
 function
-OS_FUNCTION_ABORT(win32_abort)
+OS_ABORT(win32_abort)
 {
     ExitProcess(1);
 }
@@ -65,7 +65,7 @@ OS_FUNCTION_ABORT(win32_abort)
 // Note: Memory
 //
 function
-OS_FUNCTION_RESERVE(win32_reserve)
+OS_RESERVE(win32_reserve)
 {
     DWORD alloc_flags   = MEM_RESERVE;
     DWORD protect_flags = PAGE_NOACCESS;
@@ -80,13 +80,13 @@ OS_FUNCTION_RESERVE(win32_reserve)
 }
 
 function
-OS_FUNCTION_RELEASE(win32_release)
+OS_RELEASE(win32_release)
 {
     VirtualFree(ptr, 0, MEM_RELEASE);
 }
 
 function
-OS_FUNCTION_COMMIT(win32_commit)
+OS_COMMIT(win32_commit)
 {
     U64 page_snapped_size = size;
     page_snapped_size += win32_get_page_size() - 1;
@@ -95,7 +95,7 @@ OS_FUNCTION_COMMIT(win32_commit)
 }
 
 function
-OS_FUNCTION_DECOMMIT(win32_decommit)
+OS_DECOMMIT(win32_decommit)
 {
     VirtualFree(ptr, size, MEM_DECOMMIT);
 }
@@ -104,7 +104,7 @@ OS_FUNCTION_DECOMMIT(win32_decommit)
 // Note: File System
 //
 function
-OS_FUNCTION_OPEN_FILE(win32_open_file)
+OS_OPEN_FILE(win32_open_file)
 {
     Temporary_Arena scratch = scratch_begin();
 
@@ -151,7 +151,7 @@ OS_FUNCTION_OPEN_FILE(win32_open_file)
 }
 
 function
-OS_FUNCTION_CLOSE_FILE(win32_close_file)
+OS_CLOSE_FILE(win32_close_file)
 {
     HANDLE handle = (HANDLE)file.u64;
     if (handle != INVALID_HANDLE_VALUE)
@@ -159,7 +159,7 @@ OS_FUNCTION_CLOSE_FILE(win32_close_file)
 }
 
 function
-OS_FUNCTION_GET_FILE_SIZE(win32_get_file_size)
+OS_GET_FILE_SIZE(win32_get_file_size)
 {
     HANDLE handle = (HANDLE)file.u64;
     if (handle == INVALID_HANDLE_VALUE)
@@ -171,7 +171,7 @@ OS_FUNCTION_GET_FILE_SIZE(win32_get_file_size)
 }
 
 function
-OS_FUNCTION_READ_FILE(win32_read_file)
+OS_READ_FILE(win32_read_file)
 {
     HANDLE handle = (HANDLE)file.u64;
 
@@ -198,7 +198,7 @@ OS_FUNCTION_READ_FILE(win32_read_file)
 }
 
 function
-OS_FUNCTION_READ_TIMER(win32_read_timer)
+OS_READ_TIMER(win32_read_timer)
 {
     LARGE_INTEGER counter;
     QueryPerformanceCounter(&counter);
