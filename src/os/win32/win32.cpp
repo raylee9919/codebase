@@ -35,7 +35,8 @@ OS_CREATE_WINDOW(win32_create_window)
     // @Note: Place this before creating window.
     // win32_assume_hr(SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2));
     
-    HINSTANCE hinst = (HINSTANCE)instance.u64;
+    HINSTANCE hinst = win32_state.hinst;
+    assert(hinst);
 
     WNDCLASSW wcex = {};
     {
@@ -53,9 +54,9 @@ OS_CREATE_WINDOW(win32_create_window)
 
     if (RegisterClassW(&wcex))
     {
-        HWND hwnd = CreateWindowExW(0/*style->DWORD*/, wcex.lpszClassName, (WCHAR *)title.str,
+        HWND hwnd = CreateWindowExW(0/*style->DWORD*/, wcex.lpszClassName, title,
                                     WS_OVERLAPPEDWINDOW|WS_VISIBLE,
-                                    CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+                                    CW_USEDEFAULT, CW_USEDEFAULT, width, height,
                                     NULL, NULL, hinst, NULL);
         result.u64 = (U64)hwnd;
     }
@@ -293,8 +294,8 @@ OS_READ_TIMER(win32_read_timer)
     return result;
 }
 
-function U64
-win32_query_timer_frequency(void)
+function
+OS_QUERY_TIMER_FREQUENCY(win32_query_timer_frequency)
 {
     LARGE_INTEGER frequency;
     QueryPerformanceFrequency(&frequency);
@@ -303,7 +304,7 @@ win32_query_timer_frequency(void)
 }
 
 function void
-win32_init(void)
+win32_init(HINSTANCE hinst)
 {
     os.create_window                  = win32_create_window;
     os.get_client_size                = win32_get_client_size;
@@ -322,7 +323,8 @@ win32_init(void)
     os.get_file_size                  = win32_get_file_size;
     os.read_file                      = win32_read_file;
     os.read_timer                     = win32_read_timer;
-    os.timer_frequency                = (F32)win32_query_timer_frequency();
+    os.query_timer_frequency          = win32_query_timer_frequency;
 
     win32_state.arena = arena_alloc();
+    win32_state.hinst = hinst;
 }

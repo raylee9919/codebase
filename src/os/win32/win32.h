@@ -14,6 +14,8 @@ typedef struct Win32_State Win32_State;
 struct Win32_State
 {
     Arena *arena;
+
+    HINSTANCE hinst;
 };
 global Win32_State win32_state;
 

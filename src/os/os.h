@@ -23,7 +23,7 @@ enum
 
 typedef void Os_Thread_Proc(void *);
 
-#define OS_CREATE_WINDOW(name)                  Os_Handle name(Os_Handle instance, String16 title)
+#define OS_CREATE_WINDOW(name)                  Os_Handle name(U32 width, U32 height, wchar_t *title)
 #define OS_GET_CLIENT_SIZE(name)                V2U name(Os_Handle window)
 #define OS_JOIN_THREAD(name)                    void name(Os_Handle thread)
 #define OS_CREATE_THREAD(name)                  Os_Handle name(Os_Thread_Proc *proc, void *param)
@@ -40,6 +40,7 @@ typedef void Os_Thread_Proc(void *);
 #define OS_GET_FILE_SIZE(name)                  U64 name(Os_Handle file)
 #define OS_READ_FILE(name)                      String8 name(Arena *arena, Os_Handle file, U64 size)
 #define OS_READ_TIMER(name)                     U64 name(void)
+#define OS_QUERY_TIMER_FREQUENCY(name)          U64 name(void)
 
 typedef OS_CREATE_WINDOW(Os_Create_Window);
 typedef OS_GET_CLIENT_SIZE(Os_Get_Client_Size);
@@ -58,7 +59,7 @@ typedef OS_CLOSE_FILE(Os_Close_File);
 typedef OS_GET_FILE_SIZE(Os_Get_File_Size);
 typedef OS_READ_FILE(Os_Read_File);
 typedef OS_READ_TIMER(Os_Read_Timer);
-
+typedef OS_QUERY_TIMER_FREQUENCY(Os_Query_Timer_Frequency);
 
 typedef struct OS OS;
 struct OS
@@ -86,7 +87,7 @@ struct OS
     Os_Read_File                    *read_file;
 
     Os_Read_Timer                   *read_timer;
-    F32 timer_frequency;
+    Os_Query_Timer_Frequency        *query_timer_frequency;
 };
 global OS os;
 

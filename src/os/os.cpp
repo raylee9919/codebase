@@ -15,7 +15,7 @@
 #  else
     int WINAPI wWinMain(HINSTANCE hinst, HINSTANCE hinst_prev, PWSTR cmdline, int cmdshow)
     {
-        win32_init();
+        win32_init(hinst);
         thread_init();
 
         Os_Handle instance = {};
