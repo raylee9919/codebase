@@ -10,13 +10,11 @@
 typedef struct Bitmap Bitmap;
 struct Bitmap
 {
-    U8 *data;
     U32 width;
     U32 height;
-    U32 depth;
     U32 pitch;
-    U32 channel_count;
-    U32 bpp;
+    U32 size;
+    U8 *data;
 };
 
 
