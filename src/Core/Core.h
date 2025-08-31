@@ -7,16 +7,16 @@ struct Arena;
 struct String8;
 struct String16;
 
-// NOTE: Third-Party Includes
+// @Note: Third-Party Includes
 #include <stdint.h>
 #include <math.h>
 
-// NOTE: Keywords
+// @Note: Keywords
 #define global          static
 #define function        static
 #define local_persist   static
 
-// NOTE: Base Types
+// @Note: Base Types
 typedef int8_t   S8;
 typedef int16_t  S16;
 typedef int32_t  S32;
@@ -34,8 +34,9 @@ typedef double   F64;
 typedef struct { U64 u64[2]; } U128;
 
 
-// NOTE: Macro-Functions
+// @Note: Macro-Functions
 #define assert(exp) do { if (!(exp))  __debugbreak(); } while (0)
+#define assume(exp) assert(exp)
 #define array_count(arr) (sizeof(arr) / sizeof(arr[0]))
 #define max(a, b) ((a) > (b) ? (a) : (b))
 #define min(a, b) ((a) < (b) ? (a) : (b))
@@ -58,7 +59,7 @@ typedef struct { U64 u64[2]; } U128;
 #define U64_MAX (18446744073709551615)
 
 
-// NOTE: Functions.
+// @Note: Functions.
 function String8 read_entire_file(Arena *arena, String16 file_path);
 
 

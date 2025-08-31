@@ -11,10 +11,10 @@
 #include <d3dcompiler.h>
 
 // Note: [.h]
-#include "include/codebase.h"
+#include "Include/Codebase.h"
 
 // Note: [.cpp]
-#include "include/codebase.cpp"
+#include "Include/Codebase.cpp"
 
 
 // Note: Global Variables.
