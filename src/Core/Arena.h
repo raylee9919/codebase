@@ -35,8 +35,8 @@ function void arena_dealloc(Arena *arena);
 function void arena_pop(Arena *arena, U64 size);
 function void arena_clear(Arena *arena);
 function void *arena_push(Arena *arena, U64 size);
-#define push_struct(arena, type) ((type *)arena_push(arena, sizeof(type)))
-#define push_array(arena, type, count) ((type *)arena_push(arena, sizeof(type)*count))
+#define arena_push_struct(arena, type) ((type *)arena_push(arena, sizeof(type)))
+#define arena_push_array(arena, type, count) ((type *)arena_push(arena, sizeof(type)*count))
 
 function Temporary_Arena scratch_begin(void);
 function void scratch_end(Temporary_Arena tmp);

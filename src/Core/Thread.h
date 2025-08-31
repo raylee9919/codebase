@@ -3,13 +3,14 @@
 #ifndef LSW_THREAD_H
 #define LSW_THREAD_H
 
+typedef struct Thread_Context Thread_Context;
 struct Thread_Context
 {
     Arena *scratch_arena;
 };
 
 function void thread_init(void);
-function void thread_main_init(void);
+function void thread_main_entry(void *);
 
 thread_local Thread_Context tctx;
 

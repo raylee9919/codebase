@@ -5,26 +5,11 @@
 #define _UNICODE
 #include <windows.h>
 
-#pragma comment(lib, "user32.lib")
+#pragma comment(lib, "kernel32")
+#pragma comment(lib, "user32")
+#pragma comment(lib, "gdi32")
 
-function LRESULT CALLBACK
-win32_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
-{
-    LRESULT result = {};
-
-    switch(msg) 
-    {
-        case WM_DESTROY: {
-            PostQuitMessage(0);
-        } break;
-
-        default: {
-            result = DefWindowProcW(hwnd, msg, wparam, lparam);
-        } break;
-    }
-
-    return result;
-}
+LRESULT CALLBACK win32_window_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 function
 OS_CREATE_WINDOW(win32_create_window)
@@ -39,7 +24,7 @@ OS_CREATE_WINDOW(win32_create_window)
     WNDCLASSW wcex = {};
     {
         wcex.style              = CS_HREDRAW|CS_VREDRAW|CS_OWNDC;
-        wcex.lpfnWndProc        = win32_procedure;
+        wcex.lpfnWndProc        = win32_window_proc;
         wcex.cbClsExtra         = 0;
         wcex.cbWndExtra         = 0;
         wcex.hInstance          = hinst;
@@ -72,6 +57,42 @@ OS_GET_CLIENT_SIZE(win32_get_client_size)
     result.x = rect.right - rect.left;
     result.y = rect.bottom - rect.top;
     return result;
+}
+
+function DWORD WINAPI
+win32_thread_proc(void *param)
+{
+    Win32_Thread *thread = (Win32_Thread *)param;
+    thread->proc(thread->param);
+    return 0;
+}
+
+function
+OS_CREATE_THREAD(win32_create_thread)
+{
+    Os_Handle result = {};
+
+    DWORD thread_id;
+
+    Win32_Thread *thread = arena_push_struct(win32_state.arena, Win32_Thread);
+    thread->proc   = proc;
+    thread->param  = param;
+    thread->handle = CreateThread(0, 0, win32_thread_proc, thread, 0, &thread_id);
+
+    result.u64 = (U64)thread->handle;
+
+    return result;
+}
+
+function
+OS_JOIN_THREAD(win32_join_thread)
+{
+    HANDLE hthread = (HANDLE)thread.u64;
+    if (hthread)
+    {
+        WaitForSingleObject(hthread, INFINITE);
+        CloseHandle(hthread);
+    }
 }
 
 function
@@ -234,7 +255,7 @@ OS_READ_FILE(win32_read_file)
 
     String8 result = {};
     {
-        result.str = push_array(arena, U8, size);
+        result.str = arena_push_array(arena, U8, size);
         result.count = size;
     }
 
@@ -280,6 +301,8 @@ win32_init(void)
 {
     os.create_window                  = win32_create_window;
     os.get_client_size                = win32_get_client_size;
+    os.create_thread                  = win32_create_thread;
+    os.join_thread                    = win32_join_thread;
     os.get_page_size                  = win32_get_page_size;
     os.get_logical_processor_count    = win32_get_logical_processor_count;
     os.abort                          = win32_abort;
@@ -293,4 +316,6 @@ win32_init(void)
     os.read_file                      = win32_read_file;
     os.read_timer                     = win32_read_timer;
     os.timer_frequency                = (F32)win32_query_timer_frequency();
+
+    win32_state.arena = arena_alloc();
 }

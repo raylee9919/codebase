@@ -7,7 +7,10 @@ thread_init(void)
 }
 
 function void
-thread_main_init(void)
+thread_main_entry(void *param)
 {
-    tctx.scratch_arena = arena_alloc(kilobytes(256));
-};
+    thread_init();
+
+    Os_Handle instance = *(Os_Handle *)param;
+    main_entry(instance);
+}
