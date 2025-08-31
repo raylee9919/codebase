@@ -23,7 +23,6 @@ enum
 };
 
 // @Note: OS Macro Magic.
-#define OS_MAIN_ENTRY(name)                  int name(void)
 #define OS_GET_PAGE_SIZE(name)               U64 name(void)
 #define OS_GET_LOGICAL_PROCESSOR_COUNT(name) U32 name(void)
 #define OS_SHOW_MESSAGE(name)                void name(String16 msg)
@@ -76,7 +75,6 @@ struct Os_State
     Os_Read_Timer                   *read_timer;
     F32 timer_frequency;
 };
-
 global Os_State os;
 
 
@@ -84,22 +82,22 @@ global Os_State os;
 // @Note: Per-OS Entry.
 function int main_entry(void); // User code space forward declaration.
 
-#if OS_WINDOWS
+#ifdef OS_WINDOWS
 #  include "os/win32/win32.cpp"
-#  if BUILD_CLI
-   int main(int argc, char **argv)
-   {
-       win32_init();
-       thread_main_init();
-       main_entry();
-   }
+#  ifdef BUILD_CLI
+    int main(int argc, char **argv)
+    {
+        win32_init();
+        thread_main_init();
+        main_entry();
+    }
 #  else
-   int WINAPI wWinMain(HINSTANCE hinst, HINSTANCE hinst_prev, PWSTR cmdline, int cmdshow)
-   {
-       win32_init();
-       thread_main_init();
-       main_entry();
-   }
+    int WINAPI wWinMain(HINSTANCE hinst, HINSTANCE hinst_prev, PWSTR cmdline, int cmdshow)
+    {
+        win32_init();
+        thread_main_init();
+        main_entry();
+    }
 #  endif
 #else
 #  error Define OS: OS_WINDOWS|OS_LINUX|OS_MAC

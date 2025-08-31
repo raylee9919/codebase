@@ -5,6 +5,8 @@
 #define _UNICODE
 #include <windows.h>
 
+#pragma comment(lib, "user32.lib")
+
 function LRESULT CALLBACK
 win32_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
