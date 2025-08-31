@@ -15,13 +15,14 @@ if "%release%"=="1" set debug=0 && echo [Release Build]
 
 :: Compile/Link Line Definitions
 set flags_common=/std:c++17 /nologo /FC /Z7 /D_CRT_SECURE_NO_WARNINGS /I..\src\
+set flags_os=/DOS_WINDOWS=1
 set flags_debug=/Od /DBUILD_DEBUG=1
 set flags_release=/O2 /DBUILD_DEBUG=0
 set flags_warning=/W4 /wd4042 /wd4201 /wd4505 /wd4100 /wd4189 /wd4200
 set flags_linker=/incremental:no /opt:ref
 
 :: Choose Compile/Link Lines
-                        set flags_compile=%flags_common% %flags_warning%
+                        set flags_compile=%flags_common% %flags_warning% %flags_os%
 if "%debug%"=="1"       set flags_compile=%flags_compile% %flags_debug%
 if "%release%"=="1"     set flags_compile=%flags_compile% %flags_release%
 
@@ -29,5 +30,6 @@ if "%release%"=="1"     set flags_compile=%flags_compile% %flags_release%
 set libs=User32.lib Dwmapi.lib Gdi32.lib D3D11.lib Dwrite.lib D3DCompiler.lib 
 if not exist build mkdir build
 pushd build
-call cl ..\src\main.cpp %flags_compile% /link %flags_linker% %libs%
+::call cl ..\src\main.cpp %flags_compile% /link %flags_linker% %libs%
+call cl ..\src\entry.cpp %flags_compile% /link %flags_linker% %libs%
 popd

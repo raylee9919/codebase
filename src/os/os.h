@@ -1,5 +1,4 @@
 // Copyright (c) 2025 Seong Woo Lee. All rights reserved.
-
 #ifndef LSW_OS_H
 #define LSW_OS_H
 
@@ -7,7 +6,7 @@ struct String8;
 struct String16;
 struct Arena;
 
-// NOTE: Abstracted OS Types.
+// @Note: Abstracted OS Types.
 typedef struct Os_Handle Os_Handle;
 struct Os_Handle
 {
@@ -23,7 +22,8 @@ enum
     OS_FILE_ACCESS_CREATE_NEW = (1<<3),
 };
 
-// NOTE: OS Macro Magic.
+// @Note: OS Macro Magic.
+#define OS_FUNCTION_MAIN_ENTRY(name)                  int name(void)
 #define OS_FUNCTION_GET_PAGE_SIZE(name)               U64 name(void)
 #define OS_FUNCTION_GET_LOGICAL_PROCESSOR_COUNT(name) U32 name(void)
 #define OS_FUNCTION_SHOW_MESSAGE(name)                void name(String16 msg)
@@ -38,45 +38,71 @@ enum
 #define OS_FUNCTION_READ_FILE(name)                   String8 name(Arena *arena, Os_Handle file, U64 size)
 #define OS_FUNCTION_READ_TIMER(name)                  U64 name(void)
 
-// NOTE: OS Typedef Magic.
-typedef OS_FUNCTION_GET_PAGE_SIZE(Os_Function_Get_Page_Size);
-typedef OS_FUNCTION_GET_LOGICAL_PROCESSOR_COUNT(Os_Function_Get_Logical_Processor_Count);
-typedef OS_FUNCTION_SHOW_MESSAGE(Os_Function_Show_Message);
-typedef OS_FUNCTION_ABORT(Os_Function_Abort);
-typedef OS_FUNCTION_RESERVE(Os_Function_Reserve);
-typedef OS_FUNCTION_RELEASE(Os_Function_Release);
-typedef OS_FUNCTION_COMMIT(Os_Function_Commit);
-typedef OS_FUNCTION_DECOMMIT(Os_Function_Decommit);
-typedef OS_FUNCTION_OPEN_FILE(Os_Function_Open_File);
-typedef OS_FUNCTION_CLOSE_FILE(Os_Function_Close_File);
-typedef OS_FUNCTION_GET_FILE_SIZE(Os_Function_Get_File_Size);
-typedef OS_FUNCTION_READ_FILE(Os_Function_Read_File);
-typedef OS_FUNCTION_READ_TIMER(Os_Function_Read_Timer);
+// @Note: OS Typedef Magic.
+typedef OS_FUNCTION_GET_PAGE_SIZE(Os_Get_Page_Size);
+typedef OS_FUNCTION_GET_LOGICAL_PROCESSOR_COUNT(Os_Get_Logical_Processor_Count);
+typedef OS_FUNCTION_SHOW_MESSAGE(Os_Show_Message);
+typedef OS_FUNCTION_ABORT(Os_Abort);
+typedef OS_FUNCTION_RESERVE(Os_Reserve);
+typedef OS_FUNCTION_RELEASE(Os_Release);
+typedef OS_FUNCTION_COMMIT(Os_Commit);
+typedef OS_FUNCTION_DECOMMIT(Os_Decommit);
+typedef OS_FUNCTION_OPEN_FILE(Os_Open_File);
+typedef OS_FUNCTION_CLOSE_FILE(Os_Close_File);
+typedef OS_FUNCTION_GET_FILE_SIZE(Os_Get_File_Size);
+typedef OS_FUNCTION_READ_FILE(Os_Read_File);
+typedef OS_FUNCTION_READ_TIMER(Os_Read_Timer);
 
 
 typedef struct Os_State Os_State;
 struct Os_State
 {
-    Os_Function_Get_Page_Size *get_page_size;
-    Os_Function_Get_Logical_Processor_Count *get_logical_processor_count;
+    Os_Get_Page_Size                *get_page_size;
+    Os_Get_Logical_Processor_Count  *get_logical_processor_count;
 
-    Os_Function_Show_Message *show_message;
-    Os_Function_Abort *abort;
+    Os_Show_Message                 *show_message;
+    Os_Abort                        *abort;
 
-    Os_Function_Reserve   *reserve;
-    Os_Function_Release   *release;
-    Os_Function_Commit    *commit;
-    Os_Function_Decommit  *decommit;
+    Os_Reserve                      *reserve;
+    Os_Release                      *release;
+    Os_Commit                       *commit;
+    Os_Decommit                     *decommit;
 
-    Os_Function_Open_File       *open_file;
-    Os_Function_Close_File      *close_file;
-    Os_Function_Get_File_Size   *get_file_size;
-    Os_Function_Read_File       *read_file;
+    Os_Open_File                    *open_file;
+    Os_Close_File                   *close_file;
+    Os_Get_File_Size                *get_file_size;
+    Os_Read_File                    *read_file;
 
-    Os_Function_Read_Timer *read_timer;
+    Os_Read_Timer                   *read_timer;
     F32 timer_frequency;
 };
 
 global Os_State os;
+
+
+// ------------------------
+// @Note: Per-OS Entry.
+function int main_entry(void); // User code space forward declaration.
+
+#if OS_WINDOWS
+#  include "os/win32/win32.cpp"
+#  if BUILD_CLI
+   int main(int argc, char **argv)
+   {
+       win32_init();
+       main_entry();
+   }
+#  else
+   int WINAPI wWinMain(HINSTANCE hinst, HINSTANCE hinst_prev, PWSTR cmdline, int cmdshow)
+   {
+       win32_init();
+       main_entry();
+   }
+#  endif
+#else
+#  error Define OS: OS_WINDOWS|OS_LINUX|OS_MAC
+#endif
+
+
 
 #endif // LSW_OS_H
