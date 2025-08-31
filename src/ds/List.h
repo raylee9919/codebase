@@ -79,7 +79,7 @@ _list_alloc_front(Arena *arena, List_Node *sentinel, U64 data_size)
 function void *
 list_next_data(List_Node *sentinel, void *data)
 {
-    U64 offset = offsetof(List_Node, data);
+    U64 offset = offset_of(List_Node, data);
     List_Node *node = (List_Node *)((U8 *)data - offset);
     node = node->next;
     void *result = node != sentinel ? node->data : NULL;
