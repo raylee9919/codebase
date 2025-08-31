@@ -14,20 +14,18 @@ image_load(Arena *arena, String8 file_path)
     String8 loaded = read_entire_file(scratch.arena, file_path);
 
     U8 *data;
-    S32 width, height, channel_count, bpp, depth;
+    S32 width, height, channel_count, bytes_per_channel;
     S32 size = (S32)loaded.count * sizeof(loaded.str[0]);
 
     if (stbi_is_16_bit_from_memory(loaded.str, size))
     {
         data = (U8 *)stbi_load_16_from_memory(loaded.str, size, &width, &height, &channel_count, 0);
-        bpp = (channel_count << 1);
-        depth = 16;
+        bytes_per_channel = 16;
     }
     else
     {
         data = stbi_load_from_memory(loaded.str, size, &width, &height, &channel_count, 0);
-        bpp = channel_count;
-        depth = 8;
+        bytes_per_channel = 8;
     }
 
     if (! data)
@@ -35,13 +33,12 @@ image_load(Arena *arena, String8 file_path)
 
     Bitmap result = {};
     {
-        result.data           = data;
-        result.width          = width;
-        result.height         = height;
-        result.pitch          = width * bpp;
-        result.depth          = depth;
-        result.channel_count  = channel_count;
-        result.bpp            = bpp;
+        result.channel_count     = channel_count;
+        result.bytes_per_channel = bytes_per_channel;
+        result.width             = width;
+        result.height            = height;
+        result.pitch             = width*bytes_per_channel*channel_count;
+        result.data              = data;
     }
 
     scratch_end(scratch);
