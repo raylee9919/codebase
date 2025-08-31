@@ -12,7 +12,7 @@
 #include "ds/hash_table.h"
 #include "os/os.h"
 #include "image/image.h"
-#include "render/backend/d3d11.h"
+#include "render/render.h"
 
 // Note: [.cpp]
 #include "core/core.cpp"
@@ -21,7 +21,6 @@
 #include "core/string.cpp"
 #include "core/math.cpp"
 #include "image/image.cpp"
-#include "render/backend/d3d11.cpp"
 
 
 #endif // LSW_INCLUDE_H

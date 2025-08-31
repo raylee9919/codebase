@@ -29,7 +29,7 @@ struct Temporary_Arena
 
 
 
-// NOTE: Declaration.
+// Note: Declaration.
 function Arena *arena_alloc(U64 size);
 function void arena_dealloc(Arena *arena);
 function void arena_pop(Arena *arena, U64 size);
