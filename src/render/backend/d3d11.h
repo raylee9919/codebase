@@ -16,6 +16,7 @@ struct D3D11
     IDXGISwapChain1* swapchain;
     ID3D11RenderTargetView *framebuffer_view;
 };
+global D3D11 d3d11;
 
 function B32 d3d11_init(D3D11 *d3d11, HWND window_handle);
 function B32 d3d11_create_swapchain_and_framebuffer(D3D11 *d3d11, HWND window_handle);
