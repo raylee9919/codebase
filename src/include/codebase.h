@@ -20,6 +20,7 @@
 #include "core/thread.cpp"
 #include "core/string.cpp"
 #include "core/math.cpp"
+#include "os/os.cpp"
 #include "image/image.cpp"
 
 

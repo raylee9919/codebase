@@ -4,7 +4,8 @@
 #include "include/codebase.h"
 
 function int
-main_entry(void)
+main_entry(Os_Handle hinst)
 {
+    Os_Handle hwnd = os.create_window(hinst);
     return 0;
 }

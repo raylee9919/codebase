@@ -23,6 +23,7 @@ enum
 };
 
 // @Note: OS Macro Magic.
+#define OS_CREATE_WINDOW(name)               Os_Handle name(Os_Handle instance)
 #define OS_GET_PAGE_SIZE(name)               U64 name(void)
 #define OS_GET_LOGICAL_PROCESSOR_COUNT(name) U32 name(void)
 #define OS_SHOW_MESSAGE(name)                void name(String16 msg)
@@ -38,6 +39,7 @@ enum
 #define OS_READ_TIMER(name)                  U64 name(void)
 
 // @Note: OS Typedef Magic.
+typedef OS_CREATE_WINDOW(Os_Create_Window);
 typedef OS_GET_PAGE_SIZE(Os_Get_Page_Size);
 typedef OS_GET_LOGICAL_PROCESSOR_COUNT(Os_Get_Logical_Processor_Count);
 typedef OS_SHOW_MESSAGE(Os_Show_Message);
@@ -56,6 +58,8 @@ typedef OS_READ_TIMER(Os_Read_Timer);
 typedef struct Os_State Os_State;
 struct Os_State
 {
+    Os_Create_Window                *create_window;
+
     Os_Get_Page_Size                *get_page_size;
     Os_Get_Logical_Processor_Count  *get_logical_processor_count;
 
@@ -80,27 +84,11 @@ global Os_State os;
 
 // ------------------------
 // @Note: Per-OS Entry.
-function int main_entry(void); // User code space forward declaration.
 
-#ifdef OS_WINDOWS
-#  include "os/win32/win32.cpp"
-#  ifdef BUILD_CLI
-    int main(int argc, char **argv)
-    {
-        win32_init();
-        thread_main_init();
-        main_entry();
-    }
-#  else
-    int WINAPI wWinMain(HINSTANCE hinst, HINSTANCE hinst_prev, PWSTR cmdline, int cmdshow)
-    {
-        win32_init();
-        thread_main_init();
-        main_entry();
-    }
-#  endif
+#ifdef BUILD_CLI
+  function int main_entry(int argc, char **argv);
 #else
-#  error Define OS: OS_WINDOWS|OS_LINUX|OS_MAC
+  function int main_entry(Os_Handle instance);
 #endif
 
 

@@ -8,7 +8,7 @@
 #pragma comment(lib, "user32.lib")
 
 function LRESULT CALLBACK
-win32_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+win32_procedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
     LRESULT result = {};
 
@@ -21,6 +21,42 @@ win32_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         default: {
             result = DefWindowProcW(hwnd, msg, wparam, lparam);
         } break;
+    }
+
+    return result;
+}
+
+function
+OS_CREATE_WINDOW(win32_create_window)
+{
+    Os_Handle result = {};
+
+    // @Note: Place this before creating window.
+    // win32_assume_hr(SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2));
+    
+    HINSTANCE hinst = (HINSTANCE)instance.u64;
+
+    WNDCLASSW wcex = {};
+    {
+        wcex.style              = CS_HREDRAW|CS_VREDRAW|CS_OWNDC;
+        wcex.lpfnWndProc        = win32_procedure;
+        wcex.cbClsExtra         = 0;
+        wcex.cbWndExtra         = 0;
+        wcex.hInstance          = hinst;
+        wcex.hIcon              = NULL;
+        wcex.hCursor            = LoadCursor(hinst, IDC_ARROW);
+        wcex.hbrBackground      = (HBRUSH)GetStockObject(BLACK_BRUSH);
+        wcex.lpszMenuName       = NULL;
+        wcex.lpszClassName      = L"WindowClass";
+    }
+
+    if (RegisterClassW(&wcex))
+    {
+        HWND hwnd = CreateWindowExW(0/*style->DWORD*/, wcex.lpszClassName, L"Window",
+                                    WS_OVERLAPPEDWINDOW|WS_VISIBLE,
+                                    CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+                                    NULL, NULL, hinst, NULL);
+        result.u64 = (U64)hwnd;
     }
 
     return result;
@@ -230,6 +266,7 @@ win32_query_timer_frequency(void)
 function void
 win32_init(void)
 {
+    os.create_window                  = win32_create_window;
     os.get_page_size                  = win32_get_page_size;
     os.get_logical_processor_count    = win32_get_logical_processor_count;
     os.abort                          = win32_abort;
