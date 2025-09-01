@@ -3,7 +3,6 @@
 #define LSW_OS_H
 
 struct Utf8;
-struct String16;
 struct Arena;
 
 typedef struct Os_Handle Os_Handle;

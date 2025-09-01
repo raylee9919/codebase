@@ -10,7 +10,6 @@ main_entry(void)
 {
     Temporary_Arena scratch = scratch_begin();
     os_create_window(900, 600, L"윈도우 창");
-    os_create_window(500, 500, L"Hello, World");
     scratch_end(scratch);
 
     while (g_running)

@@ -1,4 +1,5 @@
 // Copyright (c) 2025 Seong Woo Lee. All rights reserved.
+
 #ifndef LSW_ARENA_H
 #define LSW_ARENA_H
 

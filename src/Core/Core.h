@@ -1,4 +1,5 @@
 // Copyright (c) 2025 Seong Woo Lee. All rights reserved.
+
 #ifndef LSW_CORE_H
 #define LSW_CORE_H
 
