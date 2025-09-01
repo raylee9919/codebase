@@ -3,8 +3,8 @@
 #define LSW_CORE_H
 
 struct Arena;
-struct String8;
-struct String16;
+struct Utf8;
+struct Utf16;
 
 // @Note: Third-Party Includes
 #include <stdint.h>
@@ -71,7 +71,7 @@ typedef struct { U64 u64[2]; } U128;
 
 
 // @Note: Functions.
-function String8 read_entire_file(Arena *arena, String16 file_path);
+function Utf8 read_entire_file(Arena *arena, Utf8 file_path);
 
 
 #endif // LSW_CORE_H

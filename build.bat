@@ -29,5 +29,5 @@ if "%release%"=="1"     set flags_compile=%flags_compile% %flags_release%
 set libs=Gdi32.lib
 if not exist build mkdir build
 pushd build
-call cl ..\src\main.cpp %flags_compile% /link %flags_linker% %libs%
+call cl ..\src\example.cpp %flags_compile% /link %flags_linker% %libs%
 popd

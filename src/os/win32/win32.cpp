@@ -31,12 +31,19 @@ function
 OS_CREATE_WINDOW(win32_create_window)
 {
     Os_Handle result = {};
+    Temporary_Arena scratch = scratch_begin();
 
     // @Note: Place this before creating window.
     // win32_assume_hr(SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2));
     
-    HINSTANCE hinst = win32_state.hinst;
+    HINSTANCE hinst = win32.hinst;
     assert(hinst);
+
+    char buf[256];
+    stbsp_sprintf(buf, "wcex%d", win32.next_window_idx);
+    U64 buf_len = cstring_length(buf);
+    Utf8 wcex_name_8 = utf8((U8 *)buf, buf_len);
+    Utf16 wcex_name_16 = utf16_from_utf8(scratch.arena, wcex_name_8);
 
     WNDCLASSW wcex = {};
     {
@@ -45,11 +52,11 @@ OS_CREATE_WINDOW(win32_create_window)
         wcex.cbClsExtra         = 0;
         wcex.cbWndExtra         = 0;
         wcex.hInstance          = hinst;
-        wcex.hIcon              = NULL;
+        wcex.hIcon              = LoadIcon(hinst, IDI_APPLICATION);
         wcex.hCursor            = LoadCursor(hinst, IDC_ARROW);
         wcex.hbrBackground      = (HBRUSH)GetStockObject(BLACK_BRUSH);
         wcex.lpszMenuName       = NULL;
-        wcex.lpszClassName      = L"WindowClass";
+        wcex.lpszClassName      = (wchar_t *)wcex_name_16.str;
     }
 
     if (RegisterClassW(&wcex))
@@ -61,6 +68,9 @@ OS_CREATE_WINDOW(win32_create_window)
         result.u64 = (U64)hwnd;
     }
 
+    ++win32.next_window_idx;
+
+    scratch_end(scratch);
     return result;
 }
 
@@ -91,7 +101,7 @@ OS_CREATE_THREAD(win32_create_thread)
 
     DWORD thread_id;
 
-    Win32_Thread *thread = arena_push_struct(win32_state.arena, Win32_Thread);
+    Win32_Thread *thread = arena_push_struct(win32.arena, Win32_Thread);
     thread->proc   = proc;
     thread->param  = param;
     thread->handle = CreateThread(0, 0, win32_thread_proc, thread, 0, &thread_id);
@@ -196,7 +206,7 @@ OS_OPEN_FILE(win32_open_file)
 {
     Temporary_Arena scratch = scratch_begin();
 
-    String16 path16 = string16_from_string8(scratch.arena, path);
+    Utf16 path16 = utf16_from_utf8(scratch.arena, path);
 
     DWORD desired_access = 0;
     if (flags & OS_FILE_ACCESS_READ)  
@@ -270,7 +280,7 @@ OS_READ_FILE(win32_read_file)
     if (SetFilePointerEx(handle, zero_offset, NULL, FILE_BEGIN) == 0)
     { assert(0); }
 
-    String8 result = {};
+    Utf8 result = {};
     {
         result.str = arena_push_array(arena, U8, size);
         result.count = size;
@@ -325,6 +335,6 @@ win32_init(HINSTANCE hinst)
     os_read_timer                     = win32_read_timer;
     os_query_timer_frequency          = win32_query_timer_frequency;
 
-    win32_state.arena = arena_alloc();
-    win32_state.hinst = hinst;
+    win32.arena = arena_alloc();
+    win32.hinst = hinst;
 }

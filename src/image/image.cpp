@@ -7,11 +7,11 @@ NOTE:
 */
 
 function Bitmap
-image_load(Arena *arena, String8 file_path)
+image_load(Arena *arena, Utf8 file_path)
 {
     Temporary_Arena scratch = scratch_begin();
 
-    String8 loaded = read_entire_file(scratch.arena, file_path);
+    Utf8 loaded = read_entire_file(scratch.arena, file_path);
 
     U8 *data;
     S32 width, height, channel_count, bytes_per_channel;

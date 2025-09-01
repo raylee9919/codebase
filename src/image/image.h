@@ -19,7 +19,7 @@ struct Bitmap
 };
 
 
-function Bitmap image_load(Arena *arena, String8 file_path);
+function Bitmap image_load(Arena *arena, Utf8 file_path);
 
 
 #endif // LSW_IMAGE_H

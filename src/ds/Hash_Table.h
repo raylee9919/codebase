@@ -78,6 +78,7 @@ ht_search_empty_entry(Table_Entry *entries, U64 entry_count, U64 entry_size, U64
     return NULL;
 }
 
+#if 0
 function Table_Entry *
 ht_get(Table_Entry *entries, U64 entry_count, U64 entry_size, U64 home_position, U8 *key, U64 length)
 {
@@ -107,6 +108,7 @@ ht_get(Table_Entry *entries, U64 entry_count, U64 entry_size, U64 home_position,
 
     assume(! "invalid code path.");
 }
+#endif
 
 #define ht_put(t, key, val)\
 {\

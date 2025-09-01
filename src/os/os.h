@@ -2,7 +2,7 @@
 #ifndef LSW_OS_H
 #define LSW_OS_H
 
-struct String8;
+struct Utf8;
 struct String16;
 struct Arena;
 
@@ -29,16 +29,16 @@ typedef void Os_Thread_Proc(void *);
 #define OS_CREATE_THREAD(name)                  Os_Handle name(Os_Thread_Proc *proc, void *param)
 #define OS_GET_PAGE_SIZE(name)                  U64 name(void)
 #define OS_GET_LOGICAL_PROCESSOR_COUNT(name)    U32 name(void)
-#define OS_GUI_MESSAGE(name)                    void name(String16 msg)
+#define OS_GUI_MESSAGE(name)                    void name(Utf16 msg)
 #define OS_ABORT(name)                          void name(void)
 #define OS_RESERVE(name)                        void *name(U64 size, B32 commit)
 #define OS_RELEASE(name)                        void name(void *ptr)
 #define OS_COMMIT(name)                         void name(void *ptr, U64 size)
 #define OS_DECOMMIT(name)                       void name(void *ptr, U64 size)
-#define OS_OPEN_FILE(name)                      Os_Handle name(String8 path, Os_File_Access_Flags flags)
+#define OS_OPEN_FILE(name)                      Os_Handle name(Utf8 path, Os_File_Access_Flags flags)
 #define OS_CLOSE_FILE(name)                     void name(Os_Handle file)
 #define OS_GET_FILE_SIZE(name)                  U64 name(Os_Handle file)
-#define OS_READ_FILE(name)                      String8 name(Arena *arena, Os_Handle file, U64 size)
+#define OS_READ_FILE(name)                      Utf8 name(Arena *arena, Os_Handle file, U64 size)
 #define OS_READ_TIMER(name)                     U64 name(void)
 #define OS_QUERY_TIMER_FREQUENCY(name)          U64 name(void)
 

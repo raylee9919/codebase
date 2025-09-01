@@ -1,7 +1,19 @@
 // Copyright (c) 2025 Seong Woo Lee. All rights reserved.
 
+
+// ------------------------------
+// Note: C-String.
 //
-// NOTE: Helper Functions.
+function U64
+cstring_length(char *cstr)
+{
+    U64 result = 0;
+    for(;cstr[result]; result++);
+    return result;
+}
+
+// ------------------------------
+// Note: Helper Functions.
 //
 function B32
 is_alpha(U8 c)
@@ -26,58 +38,38 @@ is_whitespace(U8 c)
     return result;
 }
 
-function U64
-length_cstring(char *cstr)
-{
-    U64 result = 0;
-    for(;cstr[result]; result++);
-    return result;
-}
-
-// @Todo: Better?
-function B32
-string8_equal(U8 *a, U8 *b, U64 len)
-{
-    for (U64 i = 0; i < len; ++i)
-    {
-        if (a[i] != b[i])
-        { return false; }
-    }
-    return true;
-}
-
 //
-// NOTE: String Constructors
+// Note: String Constructors
 //
-function String8
-string8(U8 *str, U64 count)
+function Utf8
+utf8(U8 *str, U64 count)
 {
-    String8 result = {};
+    Utf8 result = {};
     result.str = str;
     result.count = count;
     return result;
 }
 
-function String16
-string16(U16 *str, U64 count)
+function Utf16
+utf16(U16 *str, U64 count)
 {
-    String16 result = {};
+    Utf16 result = {};
     result.str = str;
     result.count = count;
     return result;
 }
 
-function String32
-string32(U32 *str, U64 count)
+function Utf32
+utf32(U32 *str, U64 count)
 {
-    String32 result = {};
+    Utf32 result = {};
     result.str = str;
     result.count = count;
     return result;
 }
 
 //
-// NOTE: Encoding/Decoding.
+// Note: Encoding/Decoding.
 //
 function Codepoint
 codepoint_from_utf8(U8 *str, U64 max)
@@ -172,32 +164,32 @@ utf16_from_codepoint(U16 *out, U32 codepoint)
 }
 
 //
-// NOTE: Conversion.
+// Note: Conversion.
 //
-function String16        
-string16_from_string8(Arena *arena, String8 str8)
+function Utf16        
+utf16_from_utf8(Arena *arena, Utf8 str)
 {
-    U64 max_count = (str8.count << 1);
+    U64 max_count = (str.count << 1);
 
     U16 *str16 = arena_push_array(arena, U16, max_count + 1);
 
-    U8 *src = str8.str;
+    U8 *src = str.str;
     U16 *dst = str16;
-    U8 *src_end = src + str8.count;
+    U8 *src_end = src + str.count;
 
     for (;;)
     {
         if (src >= src_end)
         { break; }
 
-        Codepoint codepoint = codepoint_from_utf8(src, str8.count);
+        Codepoint codepoint = codepoint_from_utf8(src, str.count);
         U32 advance = utf16_from_codepoint(dst, codepoint.val);
 
         src += codepoint.advance;
         dst += advance;
     }
 
-    String16 result = {};
+    Utf16 result = {};
     {
         result.str = str16;
         result.count = dst - str16;

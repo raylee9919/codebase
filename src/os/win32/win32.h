@@ -16,8 +16,9 @@ struct Win32_State
     Arena *arena;
 
     HINSTANCE hinst;
+    int next_window_idx;
 };
-global Win32_State win32_state;
+global Win32_State win32;
 
 
 
