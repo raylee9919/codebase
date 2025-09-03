@@ -10,21 +10,11 @@ main_entry(void)
 {
     Arena *arena = arena_alloc();
 
-    Dynamic_Array(int) foo = {};
-    darr_init(&foo, arena);
-    darr_push(&foo, 1);
-    darr_push(&foo, 2);
-    darr_push(&foo, 3);
-    darr_push(&foo, 4);
-    darr_push(&foo, 5);
-    darr_push(&foo, 6);
-    darr_push(&foo, 7);
-
     F64 inv_timer_freq = 1.0 / (F64)os_query_timer_frequency();
     U64 old_counter = os_read_timer();
     F32 time = 0.0;
     
-    Os_Window *window = os_create_window(900, 600, L"Main Window");
+    Os_Window *window = os_create_window(1920, 1080, L"Main Window");
 
     while (!window->should_close)
     {
@@ -50,7 +40,7 @@ main_entry(void)
             HDC dc = GetDC(hwnd);
             V2U dim = os_get_client_size(it);
             F32 n = sinf(time)*0.5f + 0.5f;
-            int x = (int)(n*800.0f + 0.5f);
+            int x = (int)(n*dim.x);
             PatBlt(dc, 0, 0, x, dim.y, BLACKNESS);
             PatBlt(dc, x, 0, dim.x, dim.y, WHITENESS);
             ReleaseDC(hwnd, dc);

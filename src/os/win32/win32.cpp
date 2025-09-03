@@ -187,7 +187,7 @@ OS_CREATE_WINDOW(win32_create_window)
     Os_Window *result = NULL;
 
     // @Note: Place this before creating window.
-    // win32_assume_hr(SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2));
+    assume(SUCCEEDED(SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2)));
     
     HINSTANCE hinst = win32.hinst;
     assert(hinst);
