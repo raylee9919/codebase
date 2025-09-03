@@ -10,6 +10,16 @@ main_entry(void)
 {
     Arena *arena = arena_alloc();
 
+    Dynamic_Array(int) foo = {};
+    darr_init(&foo, arena);
+    darr_push(&foo, 1);
+    darr_push(&foo, 2);
+    darr_push(&foo, 3);
+    darr_push(&foo, 4);
+    darr_push(&foo, 5);
+    darr_push(&foo, 6);
+    darr_push(&foo, 7);
+
     F64 inv_timer_freq = 1.0 / (F64)os_query_timer_frequency();
     U64 old_counter = os_read_timer();
     F32 time = 0.0;
