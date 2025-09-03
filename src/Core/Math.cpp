@@ -34,6 +34,14 @@ operator - (V2 a, V2 b)
     return result;
 }
 
+function V2&
+operator -= (V2& a, V2 b)
+{
+    a.x -= b.x;
+    a.y -= b.y;
+    return a;
+}
+
 function V2
 operator * (F32 f, V2 v)
 {
@@ -233,17 +241,25 @@ round_f32_to_s32(F32 x)
 // ------------------------------------------
 // @Note: Geometry
 function B32
+intersects(AABB2 box, V2 point)
+{
+    B32 result = false;
+    // @Todo: Pixel perfect.
+    if (point.x >= box.min.x && point.x < box.max.x &&
+        point.y >= box.min.y && point.y < box.max.y) 
+    { result = true; }
+    return result;
+}
+
+function B32
 intersects(AABB2 a, AABB2 b)
 {
     B32 result = false;
     V2 half_dim = (a.max - a.min) * 0.5f;
-    V2 max = a.max + half_dim;
-    V2 min = a.min - half_dim;
+    a.min -= half_dim;
+    a.max += half_dim;
     V2 point = (b.min + b.max) * 0.5f;
-    // @Todo: Inclusive?
-    if (point.x >= min.x && point.x < max.x &&
-        point.y >= min.y && point.y < max.y) 
-    { result = true; }
+    result = intersects(a, point);
     return result;
 }
 

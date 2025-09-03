@@ -52,6 +52,7 @@ function V2 v2(F32, F32);
 function V2 operator + (V2, V2);
 function V2& operator += (V2&, V2);
 function V2 operator - (V2, V2);
+function V2& operator -= (V2& a, V2 b);
 function V2 operator * (F32 f, V2 v);
 function V2 operator * (V2 v, F32 f);
 function F32 dot(V2, V2);
@@ -85,6 +86,7 @@ function F32 tan32(F32);
 function S32 round_f32_to_s32(F32);
 
 // @Note: Geometry
+function B32 intersects(AABB2 box, V2 point);
 function B32 intersects(AABB2 a, AABB2 b);
 function AABB2 intersection(AABB2 a, AABB2 b);
 
