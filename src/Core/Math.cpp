@@ -38,8 +38,8 @@ function V2
 operator * (F32 f, V2 v)
 {
     V2 result = v;
-    v.x *= f;
-    v.y *= f;
+    result.x *= f;
+    result.y *= f;
     return result;
 }
 
@@ -47,8 +47,8 @@ function V2
 operator * (V2 v, F32 f)
 {
     V2 result = v;
-    v.x *= f;
-    v.y *= f;
+    result.x *= f;
+    result.y *= f;
     return result;
 }
 
