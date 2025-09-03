@@ -13,21 +13,29 @@ v2(F32 x, F32 y)
 }
 
 function V2
-operator +(V2 a, V2 b)
+operator + (V2 a, V2 b)
 {
     V2 result = V2{a.x + b.x, a.y + b.y};
     return result;
 }
 
+function V2&
+operator += (V2& a, V2 b)
+{
+    a.x += b.x;
+    a.y += b.y;
+    return a;
+}
+
 function V2
-operator -(V2 a, V2 b)
+operator - (V2 a, V2 b)
 {
     V2 result = V2{a.x - b.x, a.y - b.y};
     return result;
 }
 
 function V2
-operator *(F32 f, V2 v)
+operator * (F32 f, V2 v)
 {
     V2 result = v;
     v.x *= f;
@@ -36,7 +44,7 @@ operator *(F32 f, V2 v)
 }
 
 function V2
-operator *(V2 v, F32 f)
+operator * (V2 v, F32 f)
 {
     V2 result = v;
     v.x *= f;

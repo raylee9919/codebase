@@ -49,10 +49,11 @@ struct AABB2
 
 // @Note: V2
 function V2 v2(F32, F32);
-function V2 operator +(V2, V2);
-function V2 operator -(V2, V2);
-function V2 operator *(F32 f, V2 v);
-function V2 operator *(V2 v, F32 f);
+function V2 operator + (V2, V2);
+function V2& operator += (V2&, V2);
+function V2 operator - (V2, V2);
+function V2 operator * (F32 f, V2 v);
+function V2 operator * (V2 v, F32 f);
 function F32 dot(V2, V2);
 function V2 hadamard(V2, V2);
 
