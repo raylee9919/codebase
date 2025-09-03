@@ -239,10 +239,10 @@ function F32
 normalize01(V2 range, F32 val)
 {
     F32 result = 0.0f;
-    F32 r = (range.y - range.x);
-    F32 t = (val - range.x);
-    if (t != 0.0f)
-    { result = clamp(r/t, 0.0f, 1.0f); }
+    F32 denom = (range.y - range.x);
+    F32 numer = (val - range.x);
+    if (denom != 0.0f)
+    { result = clamp(numer/denom, 0.0f, 1.0f); }
     return result;
 }
 
