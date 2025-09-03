@@ -64,12 +64,14 @@ typedef struct { U64 u64[2]; } U128;
 
 #define quick_sort(base, type, count, compare_function) qsort((base), (count), sizeof(type), (int(*)(const void *, const void *))(compare_function))
 
+// ----------------------------------
 // @Note: Memory Operations
 #define memory_copy(dst, src, size) memcpy((dst), (src), (size))
 #define memory_move(dst, src, size) memmove((dst), (src), (size))
 #define memory_set(dst, byte, size) memset((dst), (byte), (size))
 #define memory_zero(ptr, size) memory_set((ptr), 0, (size))
 
+// ----------------------------------
 // @Note: Doubly-Linked List.
 #define dll_append(sentinel, node) \
     assume(sentinel); \
@@ -81,6 +83,37 @@ typedef struct { U64 u64[2]; } U128;
 #define dll_for(sentinel, it) \
     assume(sentinel); \
     for (decltype(sentinel) it = sentinel->next; it != sentinel; it = it->next)
+
+// ----------------------------------
+// @Note: Array
+typedef struct 
+{
+    Arena *arena;
+    void *base;
+    U64 count_cur;
+    U64 count_max;
+} Dynamic_Array_Data;
+
+function Dynamic_Array_Data
+dynamic_array_data_init(Arena *arena, U64 item_size, U64 count);
+
+#define Dynamic_Array(ARENA, TYPE)\
+    union {\
+        Dynamic_Array_Data data = dynamic_array_data_init(ARENA, sizeof(TYPE), 4);\
+        TYPE *payload;\
+    }
+
+// @Todo: Fragmentation.
+#define darr_push(A, ITEM)\
+    if (((A)->data.count_cur >= (A)->data.count_max)) {\
+        void *new_base = arena_push((A)->data.arena, sizeof(decltype(*(A)->payload)) * ((A)->data.count_max << 1));\
+        memory_copy( new_base, (A)->data.base, sizeof(decltype(*(A)->payload)) * (A)->data.count_max );\
+        (A)->data.count_max <<= 1;\
+    }\
+    *(decltype((A)->payload))( ((decltype((A)->payload))((A)->data.base)) + ((A)->data.count_cur++) ) = ITEM;
+
+    
+
 
 
 // @Note: Functions.

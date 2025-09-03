@@ -8,6 +8,8 @@ global B32 g_running = true;
 function int
 main_entry(void)
 {
+    Arena *arena = arena_alloc();
+
     F64 inv_timer_freq = 1.0 / (F64)os_query_timer_frequency();
     U64 old_counter = os_read_timer();
     F32 time = 0.0;
