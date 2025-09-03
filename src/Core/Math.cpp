@@ -240,6 +240,7 @@ lerp(V2 range, F32 t)
 {
     F32 d = range.y - range.x;
     F32 result = range.x + d*t;
+    return result;
 }
 
 function F32
