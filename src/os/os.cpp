@@ -50,10 +50,6 @@
             if ( (msg.message == WM_CHAR) || (msg.message == WM_KEYDOWN) ||
                  (msg.message == WM_QUIT) || (msg.message == WM_SIZE) ) 
             {
-                char buf[256];
-                snprintf(buf, 256, "Service Thread: %d\n", msg.message);
-                OutputDebugString(buf);
-
                 PostThreadMessageW(win32.main_thread_id, msg.message, msg.wParam, msg.lParam);
             }
             else
