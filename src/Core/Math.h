@@ -85,6 +85,9 @@ function F32 tan32(F32);
 
 function S32 round_f32_to_s32(F32);
 
+// @Note: Normalize
+function F32 normalize01(V2 range, F32 val);
+
 // @Note: Geometry
 function B32 intersects(AABB2 box, V2 point);
 function B32 intersects(AABB2 a, AABB2 b);

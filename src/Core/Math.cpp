@@ -233,6 +233,18 @@ round_f32_to_s32(F32 x)
     return result;
 }
 
+// -----------------------
+// Note: Normalize 
+function F32
+normalize01(V2 range, F32 val)
+{
+    F32 result = 0.0f;
+    F32 r = (range.y - range.x);
+    F32 t = (val - range.x);
+    if (t != 0.0f)
+    { result = clamp(r/t, 0.0f, 1.0f); }
+    return result;
+}
 
 // -----------------------
 // Note: Geometry 
