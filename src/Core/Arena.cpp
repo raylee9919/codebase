@@ -119,6 +119,16 @@ arena_push(Arena *arena, U64 size)
     return result;
 }
 
+function void *
+_arena_bootstrap(U64 struct_size, U64 arena_offset)
+{
+    Arena *arena = arena_alloc();
+    U8 *result = (U8 *)arena_push(arena, struct_size);
+    Arena **actual_arena = ((Arena **)(result + arena_offset));
+    *actual_arena = arena;
+    return result;
+}
+
 function Temporary_Arena
 scratch_begin(void)
 {
