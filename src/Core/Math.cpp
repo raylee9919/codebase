@@ -236,6 +236,13 @@ round_f32_to_s32(F32 x)
 // -----------------------
 // Note: Normalize 
 function F32
+lerp(V2 range, F32 t)
+{
+    F32 d = range.y - range.x;
+    F32 result = range.x + d*t;
+}
+
+function F32
 normalize01(V2 range, F32 val)
 {
     F32 result = 0.0f;
