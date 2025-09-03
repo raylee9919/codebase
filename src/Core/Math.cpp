@@ -285,10 +285,10 @@ intersection(AABB2 a, AABB2 b)
     AABB2 result = {};
     if (intersects(a, b))
     {
-        result.min.x = (a.min.x >= b.max.x) ? (a.min.x) : (b.min.x);
-        result.max.x = (a.max.x <  b.max.x) ? (a.max.x) : (b.max.x);
-        result.min.y = (a.min.y >= b.max.y) ? (a.min.y) : (b.min.y);
-        result.max.y = (a.max.y <  b.max.y) ? (a.max.y) : (b.max.y);
+        result.min.x = (a.min.x >= b.min.x) ? a.min.x : b.min.x; 
+        result.max.x = (a.max.x >= b.max.x) ? b.max.x : a.max.x;
+        result.min.y = (a.min.y >= b.min.y) ? a.min.y : b.min.y; 
+        result.max.y = (a.max.y >= b.max.y) ? b.max.y : a.max.y;
     }
     return result;
 }
