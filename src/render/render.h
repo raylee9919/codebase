@@ -4,8 +4,8 @@
 
 #ifdef OS_WINDOWS
 #  ifndef BUILD_CLI
-#    include "render/backend/sw_d3d11.h"
-#    include "render/backend/sw_d3d11.cpp"
+#    include "render/backend/d3d11.h"
+#    include "render/backend/d3d11.cpp"
 #  endif
 #else
 #  error Define OS: OS_WINDOWS|OS_LINUX|OS_MAC

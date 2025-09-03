@@ -86,7 +86,7 @@ d3d11_create_swapchain_and_framebuffer(HWND window_handle)
     {
         d3d11_swapchain_desc.Width              = 0; // Use window width and height.
         d3d11_swapchain_desc.Height             = 0;
-        d3d11_swapchain_desc.Format             = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB; // @STUDY: Why BGRA? Not RGBA? Is it just a historical reason of Microsoft fucking things up?
+        d3d11_swapchain_desc.Format             = DXGI_FORMAT_B8G8R8A8_UNORM;
         d3d11_swapchain_desc.SampleDesc.Count   = 1;
         d3d11_swapchain_desc.SampleDesc.Quality = 0;
         d3d11_swapchain_desc.BufferUsage        = DXGI_USAGE_RENDER_TARGET_OUTPUT;
