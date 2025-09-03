@@ -44,7 +44,7 @@ function B32 is_digit(U8 c);
 function B32 is_whitespace(U8 c);
 
 // Note: Constructors.
-#define utf8_literal(str) string8((U8 *)str, sizeof(str) - 1)
+#define utf8_literal(str) utf8((U8 *)str, sizeof(str) - 1)
 function Utf8 utf8(U8 *str, U64 count);
 function Utf16 utf16(U16 *str, U64 count);
 function Utf32 utf32(U32 *str, U64 count);

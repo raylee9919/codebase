@@ -6,7 +6,7 @@
 typedef struct Thread_Context Thread_Context;
 struct Thread_Context
 {
-    Arena *scratch_arena;
+    Arena       *scratch_arena;
 };
 
 function void thread_init(void);

@@ -11,6 +11,16 @@ struct Os_Handle
     U64 u64;
 };
 
+typedef struct Os_Window Os_Window;
+struct Os_Window
+{
+    Os_Window   *prev;
+    Os_Window   *next;
+
+    Os_Handle handle;
+    B32 should_close;
+};
+
 typedef U32 Os_File_Access_Flags;
 enum
 {
@@ -20,12 +30,12 @@ enum
     OS_FILE_ACCESS_CREATE_NEW = (1<<3),
 };
 
-typedef void Os_Thread_Proc(void *);
-
-#define OS_CREATE_WINDOW(name)                  Os_Handle name(U32 width, U32 height, wchar_t *title)
-#define OS_GET_CLIENT_SIZE(name)                V2U name(Os_Handle window)
+#define OS_CREATE_WINDOW(name)                  Os_Window *name(U32 width, U32 height, wchar_t *title)
+#define OS_CLOSE_WINDOW(name)                   void name(Os_Window *window)
+#define OS_GET_CLIENT_SIZE(name)                V2U name(Os_Window *window)
+#define OS_THREAD_PROC(name)                    void name(void *)
 #define OS_JOIN_THREAD(name)                    void name(Os_Handle thread)
-#define OS_CREATE_THREAD(name)                  Os_Handle name(Os_Thread_Proc *proc, void *param)
+#define OS_CREATE_THREAD(name)                  U64 name(Os_Thread_Proc *proc, void *param)
 #define OS_GET_PAGE_SIZE(name)                  U64 name(void)
 #define OS_GET_LOGICAL_PROCESSOR_COUNT(name)    U32 name(void)
 #define OS_GUI_MESSAGE(name)                    void name(Utf16 msg)
@@ -42,7 +52,9 @@ typedef void Os_Thread_Proc(void *);
 #define OS_QUERY_TIMER_FREQUENCY(name)          U64 name(void)
 
 typedef OS_CREATE_WINDOW(Os_Create_Window);
+typedef OS_CLOSE_WINDOW(Os_Close_Window);
 typedef OS_GET_CLIENT_SIZE(Os_Get_Client_Size);
+typedef OS_THREAD_PROC(Os_Thread_Proc);
 typedef OS_JOIN_THREAD(Os_Join_Thread);
 typedef OS_CREATE_THREAD(Os_Create_Thread);
 typedef OS_GET_PAGE_SIZE(Os_Get_Page_Size);
@@ -60,9 +72,9 @@ typedef OS_READ_FILE(Os_Read_File);
 typedef OS_READ_TIMER(Os_Read_Timer);
 typedef OS_QUERY_TIMER_FREQUENCY(Os_Query_Timer_Frequency);
 
-// -------------------------------------------------------------
-// Note: Function Pointers
+
 Os_Create_Window                *os_create_window;
+Os_Close_Window                 *os_close_window;
 Os_Get_Client_Size              *os_get_client_size;
 
 Os_Create_Thread                *os_create_thread;
@@ -86,6 +98,15 @@ Os_Read_File                    *os_read_file;
 
 Os_Read_Timer                   *os_read_timer;
 Os_Query_Timer_Frequency        *os_query_timer_frequency;
+
+
+typedef struct Os Os;
+struct Os
+{
+    Os_Window *window_sentinel;
+};
+global Os os;
+
 
 
 #ifdef BUILD_CLI

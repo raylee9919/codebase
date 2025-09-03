@@ -70,6 +70,19 @@ typedef struct { U64 u64[2]; } U128;
 #define memory_set(dst, byte, size) memset((dst), (byte), (size))
 #define memory_zero(ptr, size) memory_set((ptr), 0, (size))
 
+// @Note: Linked List Operations.
+#define dll_append(sentinel, node) \
+    assume(sentinel); \
+    (node)->next = (sentinel); \
+    (node)->prev = (sentinel)->prev; \
+    (sentinel)->prev->next = (node); \
+    (sentinel)->prev = (node);
+
+#define dll_for(sentinel, it) \
+    assume(sentinel); \
+    for (decltype(sentinel) it = sentinel->next; it != sentinel; it = it->next)
+
+
 
 // @Note: Functions.
 function Utf8 read_entire_file(Arena *arena, Utf8 file_path);

@@ -10,6 +10,5 @@ function void
 thread_main_entry(void *param)
 {
     thread_init();
-
     main_entry();
 }
