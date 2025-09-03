@@ -1,8 +1,7 @@
 // Copyright (c) 2025 Seong Woo Lee. All rights reserved.
 
-//
+// -----------------------
 // Note: V2
-//
 function V2
 v2(F32 x, F32 y)
 {
@@ -74,9 +73,8 @@ hadamard(V2 a, V2 b)
     return result;
 }
 
-//
+// -----------------------
 // Note: V3
-//
 function V3
 v3(F32 x, F32 y, F32 z)
 {
@@ -115,9 +113,8 @@ hadamard(V3 a, V3 b)
     return result;
 }
 
-//
+// -----------------------
 // Note: V4
-//
 function V4
 v4(F32 r, F32 g, F32 b, F32 a)
 {
@@ -157,9 +154,8 @@ hadamard(V4 a, V4 b)
     return result;
 }
 
-//
-// Note: M4x4
-//
+// -----------------------
+// Note: M4x4 
 function M4x4
 operator *(M4x4 a, M4x4 b)
 {
@@ -228,8 +224,8 @@ tan32(F32 f)
     return result;
 }
 
-// -----------------------------------------
-// @Note: Round
+// -----------------------
+// Note: Round 
 function S32 
 round_f32_to_s32(F32 x)
 {
@@ -238,8 +234,8 @@ round_f32_to_s32(F32 x)
 }
 
 
-// ------------------------------------------
-// @Note: Geometry
+// -----------------------
+// Note: Geometry 
 function B32
 intersects(AABB2 box, V2 point)
 {
@@ -267,4 +263,29 @@ function AABB2
 intersection(AABB2 a, AABB2 b)
 {
     AABB2 result = {};
+    if (intersects(a, b))
+    {
+        if (a.min.x >= b.max.x)
+        {
+            result.min.x = a.min.x;
+            result.max.x = b.max.x;
+        }
+        else
+        {
+            result.min.x = b.min.x;
+            result.max.x = a.max.x;
+        }
+
+        if (a.min.y >= b.max.y)
+        {
+            result.min.y = a.min.y;
+            result.max.y = b.max.y;
+        }
+        else
+        {
+            result.min.y = b.min.y;
+            result.max.y = a.max.y;
+        }
+    }
+    return result;
 }
