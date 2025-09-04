@@ -272,10 +272,10 @@ intersects(AABB2 a, AABB2 b)
 {
     B32 result = false;
     V2 half_dim = (a.max - a.min) * 0.5f;
-    a.min -= half_dim;
-    a.max += half_dim;
-    V2 point = (b.min + b.max) * 0.5f;
-    result = intersects(a, point);
+    b.min -= half_dim;
+    b.max += half_dim;
+    V2 point = (a.min + a.max) * 0.5f;
+    result = intersects(b, point);
     return result;
 }
 
