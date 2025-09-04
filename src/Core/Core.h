@@ -36,7 +36,7 @@ typedef struct { U64 u64[2]; } U128;
 
 // @Note: Macro-Functions
 #define assert(exp) do { if (!(exp)) __debugbreak(); } while (0)
-#define assume(exp) assert(exp)
+#define assume(exp) do { if (!(exp)) __debugbreak(); } while (0)
 #define array_count(arr) (sizeof(arr) / sizeof(arr[0]))
 #define max(a, b) ((a) > (b) ? (a) : (b))
 #define min(a, b) ((a) < (b) ? (a) : (b))
