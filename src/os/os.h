@@ -32,6 +32,7 @@ enum
 
 #define OS_CREATE_WINDOW(name)                  Os_Window *name(U32 width, U32 height, wchar_t *title)
 #define OS_CLOSE_WINDOW(name)                   void name(Os_Window *window)
+#define OS_GET_DPI(name)                        U32 name(Os_Window *window)
 #define OS_GET_CLIENT_SIZE(name)                V2U name(Os_Window *window)
 #define OS_THREAD_PROC(name)                    void name(void *)
 #define OS_JOIN_THREAD(name)                    void name(Os_Handle thread)
@@ -53,6 +54,7 @@ enum
 
 typedef OS_CREATE_WINDOW(Os_Create_Window);
 typedef OS_CLOSE_WINDOW(Os_Close_Window);
+typedef OS_GET_DPI(Os_Get_Dpi);
 typedef OS_GET_CLIENT_SIZE(Os_Get_Client_Size);
 typedef OS_THREAD_PROC(Os_Thread_Proc);
 typedef OS_JOIN_THREAD(Os_Join_Thread);
@@ -75,6 +77,7 @@ typedef OS_QUERY_TIMER_FREQUENCY(Os_Query_Timer_Frequency);
 
 Os_Create_Window                *os_create_window;
 Os_Close_Window                 *os_close_window;
+Os_Get_Dpi                      *os_get_dpi;
 Os_Get_Client_Size              *os_get_client_size;
 
 Os_Create_Thread                *os_create_thread;

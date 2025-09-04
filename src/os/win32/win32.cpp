@@ -210,10 +210,17 @@ OS_CREATE_WINDOW(win32_create_window)
     return result;
 }
 
+function HWND
+win32_get_hwnd(Os_Window *window)
+{
+    HWND result = (HWND)window->handle.u64;
+    return result;
+}
+
 function
 OS_CLOSE_WINDOW(win32_close_window)
 {
-    HWND hwnd = (HWND)window->handle.u64;
+    HWND hwnd = win32_get_hwnd(window);
     SendMessage(win32.service_window, WM_DESTROY_DANGEROUS_WINDOW, (WPARAM)hwnd, 0);
 
     B32 found = false;
@@ -234,10 +241,18 @@ OS_CLOSE_WINDOW(win32_close_window)
 }
 
 function
+OS_GET_DPI(win32_get_dpi)
+{
+    HWND hwnd = (HWND)window->handle.u64;
+    U32 result = GetDpiForWindow(hwnd);
+    return result;
+}
+
+function
 OS_GET_CLIENT_SIZE(win32_get_client_size)
 {
     V2U result = {};
-    HWND hwnd = (HWND)window->handle.u64;
+    HWND hwnd = win32_get_hwnd(window);
     RECT rect = {};
     GetClientRect(hwnd, &rect);
     result.x = rect.right - rect.left;
@@ -468,6 +483,7 @@ win32_init(HINSTANCE hinst)
 {
     os_create_window                  = win32_create_window;
     os_close_window                   = win32_close_window;
+    os_get_dpi                        = win32_get_dpi;
     os_get_client_size                = win32_get_client_size;
     os_create_thread                  = win32_create_thread;
     os_join_thread                    = win32_join_thread;
