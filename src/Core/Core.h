@@ -72,6 +72,14 @@ typedef struct { U64 u64[2]; } U128;
 #define memory_zero(ptr, size) memory_set((ptr), 0, (size))
 
 // ----------------------------------
+// @Note: Pair
+#define Pair(TYPE1, TYPE2)\
+    struct {\
+        TYPE1 a;\
+        TYPE2 b;\
+    }
+
+// ----------------------------------
 // @Note: Doubly-Linked List.
 #define dll_append(sentinel, node) \
     assume(sentinel); \
