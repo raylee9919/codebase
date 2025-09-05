@@ -10,9 +10,9 @@ main_entry(void)
 {
     Arena *arena = arena_alloc();
 
-    Dynamic_Array(int) d = {};
+    Dynamic_Array(arena, int) d = {};
     dar_push(&d, 1);
-    dar_reserve(&d, 3);
+    dar_reserve(&d, 65);
 
     F64 inv_timer_freq = 1.0 / (F64)os_query_timer_frequency();
     U64 old_counter = os_read_timer();

@@ -97,13 +97,11 @@ typedef struct
 function Dynamic_Array_Data
 dynamic_array_data_init(Arena *arena, U64 item_size, U64 count);
 
-#define Dynamic_Array(TYPE)\
+#define Dynamic_Array(ARENA, TYPE)\
     union {\
-        Dynamic_Array_Data data;\
+        Dynamic_Array_Data data = dynamic_array_data_init(ARENA, sizeof(TYPE), 64);\
         TYPE *payload;\
     }
-
-#define dar_init(A, ARENA) (A)->data = dynamic_array_data_init(ARENA, sizeof(decltype(*(A)->payload)), 64)
 
 // @Todo: Fragmentation.
 #define dar_push(A, ITEM)\
@@ -114,7 +112,7 @@ dynamic_array_data_init(Arena *arena, U64 item_size, U64 count);
     }\
     *(decltype((A)->payload))( ((decltype((A)->payload))((A)->data.base)) + ((A)->data.count_cur++) ) = ITEM;
 
-// @Note: Sets the length of an array to at least N.
+// Sets the length of an array to at least N.
 #define dar_reserve(A, N)\
     if ((A)->data.count_max < N) {\
         void *new_base = arena_push( (A)->data.arena, sizeof(decltype(*(A)->payload)) * N );\
