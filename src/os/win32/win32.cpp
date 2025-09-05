@@ -300,9 +300,8 @@ OS_JOIN_THREAD(win32_join_thread)
 function
 OS_GUI_MESSAGE(win32_gui_message)
 {
-    LPCWSTR caption = L"This is caption";
     UINT message_box_type = MB_ICONSTOP;
-    MessageBoxExW(NULL, (WCHAR *)message.str, caption, message_box_type, 0);
+    MessageBoxExW(NULL, message, caption, message_box_type, 0);
 }
 
 function

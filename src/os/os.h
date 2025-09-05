@@ -39,7 +39,7 @@ enum
 #define OS_CREATE_THREAD(name)                  U64 name(Os_Thread_Proc *proc, void *param)
 #define OS_GET_PAGE_SIZE(name)                  U64 name(void)
 #define OS_GET_LOGICAL_PROCESSOR_COUNT(name)    U32 name(void)
-#define OS_GUI_MESSAGE(name)                    void name(Utf16 message)
+#define OS_GUI_MESSAGE(name)                    void name(wchar_t *caption, wchar_t *message)
 #define OS_ABORT(name)                          void name(void)
 #define OS_RESERVE(name)                        void *name(U64 size, B32 commit)
 #define OS_RELEASE(name)                        void name(void *ptr)
