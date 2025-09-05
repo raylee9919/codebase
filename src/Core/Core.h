@@ -85,41 +85,44 @@ typedef struct { U64 u64[2]; } U128;
     for (decltype(sentinel) it = sentinel->next; it != sentinel; it = it->next)
 
 // ----------------------------------
-// @Note: Array
-typedef struct 
-{
-    Arena *arena;
-    void *base;
-    U64 count_cur;
-    U64 count_max;
-} Dynamic_Array_Data;
-
-function Dynamic_Array_Data _dar_init(Arena *arena, U64 item_size, U64 count);
+// @Note: Dynamic Array
+#define DYNAMIC_ARRAY_DATA(TYPE)\
+    struct {\
+        Arena *arena;\
+        TYPE  *base;\
+        U64   count_cur;\
+        U64   count_max;\
+    }
 
 #define Dynamic_Array(TYPE)\
     union {\
-        Dynamic_Array_Data data;\
+        DYNAMIC_ARRAY_DATA(TYPE);\
         TYPE *payload;\
     }
 
+#define DAR_RESERVE_INIT 64
+
 #define dar_init(A, ARENA)\
-    (A)->data = _dar_init(ARENA, sizeof(*(A)->payload), 64)
+    (A)->arena = ARENA;\
+    (A)->base = (decltype((A)->payload))arena_push(ARENA, sizeof(decltype(*(A)->payload)) * DAR_RESERVE_INIT);\
+    (A)->count_cur = 0;\
+    (A)->count_max = DAR_RESERVE_INIT
 
 // @Todo: Fragmentation.
 #define dar_push(A, ITEM)\
-    if (((A)->data.count_cur >= (A)->data.count_max)) {\
-        void *new_base = arena_push((A)->data.arena, sizeof(decltype(*(A)->payload)) * ((A)->data.count_max << 1));\
-        memory_copy( new_base, (A)->data.base, sizeof(decltype(*(A)->payload)) * (A)->data.count_max );\
-        (A)->data.count_max <<= 1;\
+    if (((A)->count_cur >= (A)->count_max)) {\
+        void *new_base = arena_push((A)->arena, sizeof(decltype(*(A)->payload)) * ((A)->count_max << 1));\
+        memory_copy( new_base, (A)->base, sizeof(decltype(*(A)->payload)) * (A)->count_max );\
+        (A)->count_max <<= 1;\
     }\
-    *(decltype((A)->payload))( ((decltype((A)->payload))((A)->data.base)) + ((A)->data.count_cur++) ) = ITEM;
+    *(decltype((A)->payload))( ((decltype((A)->payload))((A)->base)) + ((A)->count_cur++) ) = ITEM;
 
 // Sets the length of an array to at least N.
 #define dar_reserve(A, N)\
-    if ((A)->data.count_max < N) {\
-        void *new_base = arena_push( (A)->data.arena, sizeof(decltype(*(A)->payload)) * N );\
-        memory_copy( new_base, (A)->data.base, sizeof(decltype(*(A)->payload)) * (A)->data.count_cur );\
-        (A)->data.count_max = N; \
+    if ((A)->count_max < N) {\
+        void *new_base = arena_push( (A)->arena, sizeof(decltype(*(A)->payload)) * N );\
+        memory_copy( new_base, (A)->base, sizeof(decltype(*(A)->payload)) * (A)->count_cur );\
+        (A)->count_max = N; \
     }
 
 
