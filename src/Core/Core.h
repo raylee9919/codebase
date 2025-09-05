@@ -103,16 +103,26 @@ dynamic_array_data_init(Arena *arena, U64 item_size, U64 count);
         TYPE *payload;\
     }
 
-#define darr_init(A, ARENA) (A)->data = dynamic_array_data_init(ARENA, sizeof(decltype(*(A)->payload)), 64)
+#define dar_init(A, ARENA) (A)->data = dynamic_array_data_init(ARENA, sizeof(decltype(*(A)->payload)), 64)
 
 // @Todo: Fragmentation.
-#define darr_push(A, ITEM)\
+#define dar_push(A, ITEM)\
     if (((A)->data.count_cur >= (A)->data.count_max)) {\
         void *new_base = arena_push((A)->data.arena, sizeof(decltype(*(A)->payload)) * ((A)->data.count_max << 1));\
         memory_copy( new_base, (A)->data.base, sizeof(decltype(*(A)->payload)) * (A)->data.count_max );\
         (A)->data.count_max <<= 1;\
     }\
     *(decltype((A)->payload))( ((decltype((A)->payload))((A)->data.base)) + ((A)->data.count_cur++) ) = ITEM;
+
+// @Note: Sets the length of an array to at least N.
+#define dar_reserve(A, N)\
+    if ((A)->data.count_max < N) {\
+        void *new_base = arena_push( (A)->data.arena, sizeof(decltype(*(A)->payload)) * N );\
+        memory_copy( new_base, (A)->data.base, sizeof(decltype(*(A)->payload)) * (A)->data.count_cur );\
+        (A)->data.count_max = N; \
+    }
+
+
 
     
 
