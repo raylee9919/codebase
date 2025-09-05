@@ -97,23 +97,21 @@ arena_push(Arena *arena, U64 size)
 {
     void *result = NULL;
 
-    U64 actual_size = get_page_aligned_size(size);
-
     Arena *current = arena->current;
 
-    if (current->used + actual_size <= current->size)
+    if (current->used + size <= current->size)
     {
         result = current->base + current->used;
-        current->used += actual_size;
+        current->used += size;
     }
     else
     {
-        Arena *new_arena = arena_alloc(actual_size);
+        Arena *new_arena = arena_alloc(size);
         new_arena->prev = current;
         arena->current = new_arena;
 
         result = new_arena->base;
-        new_arena->used += actual_size;
+        new_arena->used += size;
     }
 
     return result;
