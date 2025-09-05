@@ -10,7 +10,8 @@ main_entry(void)
 {
     Arena *arena = arena_alloc();
 
-    Dynamic_Array(arena, int) d = {};
+    Dynamic_Array(int) d = {};
+    dar_init(&d, arena);
     dar_push(&d, 1);
     dar_reserve(&d, 65);
 

@@ -11,7 +11,7 @@ read_entire_file(Arena *arena, Utf8 file_path)
 }
 
 function Dynamic_Array_Data
-dynamic_array_data_init(Arena *arena, U64 item_size, U64 count)
+_dar_init(Arena *arena, U64 item_size, U64 count)
 {
     Dynamic_Array_Data result = {};
     {

@@ -94,14 +94,16 @@ typedef struct
     U64 count_max;
 } Dynamic_Array_Data;
 
-function Dynamic_Array_Data
-dynamic_array_data_init(Arena *arena, U64 item_size, U64 count);
+function Dynamic_Array_Data _dar_init(Arena *arena, U64 item_size, U64 count);
 
-#define Dynamic_Array(ARENA, TYPE)\
+#define Dynamic_Array(TYPE)\
     union {\
-        Dynamic_Array_Data data = dynamic_array_data_init(ARENA, sizeof(TYPE), 64);\
+        Dynamic_Array_Data data;\
         TYPE *payload;\
     }
+
+#define dar_init(A, ARENA)\
+    (A)->data = _dar_init(ARENA, sizeof(*(A)->payload), 64)
 
 // @Todo: Fragmentation.
 #define dar_push(A, ITEM)\
