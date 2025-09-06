@@ -7,6 +7,7 @@
 
 #pragma comment(lib, "kernel32")
 #pragma comment(lib, "user32")
+#pragma comment(lib, "shell32")
 #pragma comment(lib, "gdi32")
 
 function LRESULT CALLBACK
@@ -18,10 +19,13 @@ win32_service_window_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
     {
         case WM_CREATE_DANGEROUS_WINDOW: {
             Win32_Create_Window_Param *param = (Win32_Create_Window_Param *)wparam;
-            result = (LRESULT)CreateWindowExW(0, win32.wcex.lpszClassName, param->title,
+            HWND window = CreateWindowExW(0, win32.wcex.lpszClassName, param->title,
                                               WS_OVERLAPPEDWINDOW | WS_VISIBLE,
                                               CW_USEDEFAULT, CW_USEDEFAULT, param->width, param->height, 
                                               0, 0, win32.hinst, 0);
+
+            result = (LRESULT)window;
+            DragAcceptFiles(window, true);
         } break;
 
         case WM_DESTROY_DANGEROUS_WINDOW: {
