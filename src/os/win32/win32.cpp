@@ -10,6 +10,28 @@
 #pragma comment(lib, "shell32")
 #pragma comment(lib, "gdi32")
 
+function HWND
+win32_get_hwnd(Os_Window *window)
+{
+    HWND result = (HWND)window->handle.u64;
+    return result;
+}
+
+function Os_Window *
+os_window_from_hwnd(HWND hwnd)
+{
+    Os_Window *result = NULL;
+    dll_for (os.window_sentinel, window)
+    {
+        if (window->handle.u64 == (U64)hwnd)
+        {
+            result = window;
+            break;
+        }
+    }
+    return result;
+}
+
 function LRESULT CALLBACK
 win32_service_window_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
@@ -67,6 +89,36 @@ win32_window_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
         case WM_QUIT:
         case WM_SIZE: {
             PostThreadMessageW(win32.main_thread_id, msg, wparam, lparam);
+        } break;
+
+        case WM_DROPFILES: {
+            HDROP drop = (HDROP)wparam;
+
+            POINT pt = {};
+            DragQueryPoint(drop, &pt);
+
+            U64 file_count = DragQueryFileW(drop, 0xffffffff, NULL, 0);
+
+            Os_Event e = {};
+            e.type       = OS_EVENT_DRAG_AND_DROP;
+            e.point      = V2{(F32)pt.x, (F32)pt.y};
+            e.window     = os_window_from_hwnd(hwnd);
+            e.file_count = file_count;
+            assert(e.window);
+
+            e.file_paths = push_array(os.event_arena, Utf16, file_count);
+
+            for (U32 fi = 0; fi < file_count; ++fi)
+            {
+                U32 file_name_length = DragQueryFileW(drop, fi, 0, 0) + 1;
+                WCHAR *file_path = push_array(os.event_arena, WCHAR, file_name_length);
+                DragQueryFileW(drop, fi, file_path, file_name_length);
+                e.file_paths[fi] = utf16((U16 *)file_path, wcslen(file_path));
+            }
+            DragFinish(drop);
+            
+            assume(os.event_count < OS_MAX_EVENT_COUNT);
+            os.event_queue[os.event_count++] = e;
         } break;
 
         default: {
@@ -210,13 +262,6 @@ OS_CREATE_WINDOW(win32_create_window)
     result->handle.u64 = (U64)window;
     result->should_close = false;
 
-    return result;
-}
-
-function HWND
-win32_get_hwnd(Os_Window *window)
-{
-    HWND result = (HWND)window->handle.u64;
     return result;
 }
 
@@ -502,8 +547,16 @@ win32_init(HINSTANCE hinst)
     os_read_timer                     = win32_read_timer;
     os_query_timer_frequency          = win32_query_timer_frequency;
 
+
     win32.arena = arena_alloc();
     win32.hinst = hinst;
+
+
+    // -------------------------------------
+    // @Note: Init OS
+    os.event_arena = arena_alloc();
+    os.event_queue = push_array(os.event_arena, Os_Event, OS_MAX_EVENT_COUNT);
+    os.event_count = 0;
 
     os.window_sentinel = push_struct(win32.arena, Os_Window);
     os.window_sentinel->prev = os.window_sentinel;

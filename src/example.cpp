@@ -10,16 +10,11 @@ main_entry(void)
 {
     Arena *arena = arena_alloc();
 
-    Dynamic_Array(int) d = {};
-    dar_init(&d, arena);
-    dar_push(&d, 1);
-    dar_reserve(&d, 65);
-
     F64 inv_timer_freq = 1.0 / (F64)os_query_timer_frequency();
     U64 old_counter = os_read_timer();
     F32 time = 0.0;
     
-    Os_Window *window = os_create_window(1920, 1080, L"Main Window");
+    Os_Window *window = os_create_window(960, 540, L"Main Window");
 
     while (!window->should_close)
     {
@@ -30,6 +25,7 @@ main_entry(void)
                 case WM_CHAR: {
                     os_create_window(900, 600, L"Child Window");
                 } break;
+
             }
         }
 
@@ -37,7 +33,31 @@ main_entry(void)
         F32 dt = (F32)((F64)(new_counter - old_counter) * inv_timer_freq);
         old_counter = new_counter;
 
+        // ---------------------------------
+        // @Note: Update
+
         time += dt;
+
+        U32 event_count = os.event_count;
+        for (U32 i = 0; i < event_count; ++i)
+        {
+            Os_Event event = os.event_queue[i];
+            --os.event_count;
+
+            if (event.type == OS_EVENT_DRAG_AND_DROP)
+            {
+                for (U32 fi = 0; fi < event.file_count; ++fi)
+                {
+                    Utf16 file_path = event.file_paths[fi];
+                    OutputDebugStringW((wchar_t *)file_path.str);
+                    OutputDebugStringW(L"\n");
+                }
+            }
+            else
+            {
+                assert(! "Unknown Event");
+            }
+        }
 
         dll_for (os.window_sentinel, it)
         {

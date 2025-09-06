@@ -103,10 +103,32 @@ Os_Read_Timer                   *os_read_timer;
 Os_Query_Timer_Frequency        *os_query_timer_frequency;
 
 
+typedef U16 Os_Event_Type;
+enum
+{
+    OS_EVENT_INVALID = 0,
+    OS_EVENT_DRAG_AND_DROP,
+};
+
+typedef struct Os_Event Os_Event;
+struct Os_Event
+{
+    Os_Event_Type   type;
+    Os_Window       *window;
+    V2              point;
+    U64             file_count;
+    Utf16           *file_paths;
+};
+
+#define OS_MAX_EVENT_COUNT 2048 
 typedef struct Os Os;
 struct Os
 {
     Os_Window *window_sentinel;
+
+    Arena       *event_arena;
+    Os_Event    *event_queue;
+    U32         event_count;
 };
 global Os os;
 
