@@ -71,132 +71,183 @@ utf32(U32 *str, U64 count)
 //
 // Note: Encoding/Decoding.
 //
-function Codepoint
-codepoint_from_utf8(U8 *str, U64 max)
+function Unicode_Decode
+utf8_decode(U8 *str, U64 max)
 {
-    U8 utf8_class[32] =
-    { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,2,2,2,2,3,3,4,5 };
-
-    Codepoint result = {};
-    {
-        result.val = ~((U32)0);
-        result.advance = 1;
-    }
-
+    Unicode_Decode result = {1, U32_MAX};
     U8 byte = str[0];
     U8 byte_class = utf8_class[byte >> 3];
-
     switch (byte_class)
     {
         case 1: {
-            result.val = (U32)byte;
+            result.codepoint = byte;
         } break;
-
         case 2: {
-            if (2 <= max)
+            if (1 < max)
             {
                 U8 cont_byte = str[1];
                 if (utf8_class[cont_byte >> 3] == 0)
                 {
-                    result.val = (byte & 0x1f) << 6;
-                    result.val |= (cont_byte & 0x3f);
-                    result.advance = 2;
+                    result.codepoint = (byte & bitmask5) << 6;
+                    result.codepoint |=  (cont_byte & bitmask6);
+                    result.inc = 2;
                 }
             }
         } break;
-
         case 3: {
-            if(3 <= max)
+            if (2 < max)
             {
                 U8 cont_byte[2] = {str[1], str[2]};
-                if(utf8_class[cont_byte[0] >> 3] == 0 &&
-                   utf8_class[cont_byte[1] >> 3] == 0)
+                if (utf8_class[cont_byte[0] >> 3] == 0 &&
+                    utf8_class[cont_byte[1] >> 3] == 0)
                 {
-                    result.val = (byte & 0x1f) << 12;
-                    result.val |= ((cont_byte[0] & 0x3f) << 6);
-                    result.val |=  (cont_byte[1] & 0x3f);
-                    result.advance = 3;
+                    result.codepoint = (byte & bitmask4) << 12;
+                    result.codepoint |= ((cont_byte[0] & bitmask6) << 6);
+                    result.codepoint |=  (cont_byte[1] & bitmask6);
+                    result.inc = 3;
                 }
             }
         } break;
-
         case 4: {
-            if(4 <= max)
+            if (3 < max)
             {
                 U8 cont_byte[3] = {str[1], str[2], str[3]};
-                if(utf8_class[cont_byte[0] >> 3] == 0 &&
-                   utf8_class[cont_byte[1] >> 3] == 0 &&
-                   utf8_class[cont_byte[2] >> 3] == 0)
+                if (utf8_class[cont_byte[0] >> 3] == 0 &&
+                    utf8_class[cont_byte[1] >> 3] == 0 &&
+                    utf8_class[cont_byte[2] >> 3] == 0)
                 {
-                    result.val = (byte & 0x07) << 18;
-                    result.val |= ((cont_byte[0] & 0x3f) << 12);
-                    result.val |= ((cont_byte[1] & 0x3f) <<  6);
-                    result.val |=  (cont_byte[2] & 0x3f);
-                    result.advance = 4;
+                    result.codepoint = (byte & bitmask3) << 18;
+                    result.codepoint |= ((cont_byte[0] & bitmask6) << 12);
+                    result.codepoint |= ((cont_byte[1] & bitmask6) <<  6);
+                    result.codepoint |=  (cont_byte[2] & bitmask6);
+                    result.inc = 4;
                 }
             }
-        } break;
+        }
     }
+    return result;
+}
 
+function Unicode_Decode
+utf16_decode(U16 *str, U64 max)
+{
+    Unicode_Decode result = {1, U32_MAX};
+    result.codepoint = str[0];
+    result.inc = 1;
+    if (max > 1 && 0xD800 <= str[0] && str[0] < 0xDC00 && 0xDC00 <= str[1] && str[1] < 0xE000)
+    {
+        result.codepoint = ((str[0] - 0xD800) << 10) | ((str[1] - 0xDC00) + 0x10000);
+        result.inc = 2;
+    }
     return result;
 }
 
 function U32
-utf16_from_codepoint(U16 *out, U32 codepoint)
+utf8_encode(U8 *str, U32 codepoint)
 {
-    U32 advance = 1;
-    if (codepoint == ~((U32)0))
+    U32 inc = 0;
+    if (codepoint <= 0x7F) 
     {
-        out[0] = (U16)'?';
+        str[0] = (U8)codepoint;
+        inc = 1;
     }
-    else if (codepoint < 0x10000)
+    else if (codepoint <= 0x7FF) 
     {
-        out[0] = (U16)codepoint;
+        str[0] = (bitmask2 << 6) | ((codepoint >> 6) & bitmask5);
+        str[1] = bit8 | (codepoint & bitmask6);
+        inc = 2;
     }
-    else
+    else if (codepoint <= 0xFFFF) 
     {
-        U64 v = codepoint - 0x10000;
-        out[0] = 0xd800 + (U16)(v >> 10);
-        out[1] = 0xdc00 + (U16)(v & 0x03ff);
-        advance = 2;
+        str[0] = (bitmask3 << 5) | ((codepoint >> 12) & bitmask4);
+        str[1] = bit8 | ((codepoint >> 6) & bitmask6);
+        str[2] = bit8 | ( codepoint       & bitmask6);
+        inc = 3;
     }
-    return advance;
+    else if (codepoint <= 0x10FFFF) 
+    {
+        str[0] = (bitmask4 << 4) | ((codepoint >> 18) & bitmask3);
+        str[1] = bit8 | ((codepoint >> 12) & bitmask6);
+        str[2] = bit8 | ((codepoint >>  6) & bitmask6);
+        str[3] = bit8 | ( codepoint        & bitmask6);
+        inc = 4;
+    }
+    else 
+    {
+        str[0] = '?';
+        inc = 1;
+    }
+    return inc;
 }
 
-//
-// Note: Conversion.
-//
-function Utf16        
-utf16_from_utf8(Arena *arena, Utf8 str)
+function U32
+utf16_encode(U16 *str, U32 codepoint)
 {
-    U64 max_count = (str.count << 1);
-
-    U16 *str16 = push_array(arena, U16, max_count + 1);
-
-    U8 *src = str.str;
-    U16 *dst = str16;
-    U8 *src_end = src + str.count;
-
-    for (;;)
+    U32 inc = 1;
+    if (codepoint == U32_MAX) 
     {
-        if (src >= src_end)
-        { break; }
-
-        Codepoint codepoint = codepoint_from_utf8(src, str.count);
-        U32 advance = utf16_from_codepoint(dst, codepoint.val);
-
-        src += codepoint.advance;
-        dst += advance;
+        str[0] = (U16)'?';
     }
+    else if (codepoint < 0x10000) 
+    {
+        str[0] = (U16)codepoint;
+    }
+    else 
+    {
+        U32 v = codepoint - 0x10000;
+        str[0] = safe_u16_from_u32(0xD800 + (v >> 10));
+        str[1] = safe_u16_from_u32(0xDC00 + (v & bitmask10));
+        inc = 2;
+    }
+    return(inc);
+}
 
+// ---------------------------------------
+// Note: Conversion.
+function Utf8
+utf8_from_utf16(Arena *arena, Utf16 in)
+{
+    Utf8 result = {};
+    if (in.count)
+    {
+        U64 cap = in.count*3;
+        U8 *str = push_array(arena, U8, cap + 1);
+        U16 *ptr = in.str;
+        U16 *opl = ptr + in.count;
+        U64 size = 0;
+        Unicode_Decode consume;
+        for (;ptr < opl; ptr += consume.inc)
+        {
+            consume = utf16_decode(ptr, opl - ptr);
+            size += utf8_encode(str + size, consume.codepoint);
+        }
+        str[size] = 0;
+        arena_pop(arena, (cap - size));
+        result = utf8(str, size);
+    }
+    return result;
+}
+
+function Utf16
+utf16_from_utf8(Arena *arena, Utf8 in)
+{
     Utf16 result = {};
+    if (in.count)
     {
-        result.str = str16;
-        result.count = dst - str16;
-        result.str[result.count] = 0;
+        U64 cap = in.count*2;
+        U16 *str = push_array(arena, U16, cap + 1);
+        U8 *ptr = in.str;
+        U8 *opl = ptr + in.count;
+        U64 size = 0;
+        Unicode_Decode consume = {};
+        for (;ptr < opl; ptr += consume.inc)
+        {
+            consume = utf8_decode(ptr, opl - ptr);
+            size += utf16_encode(str + size, consume.codepoint);
+        }
+        str[size] = 0;
+        arena_pop(arena, (cap - size)*2);
+        result = utf16(str, size);
     }
-
-    arena_pop(arena, ((max_count - result.count) << 1));
-
     return result;
 }

@@ -35,6 +35,17 @@ struct Codepoint
     U32 advance;
 };
 
+typedef struct Unicode_Decode Unicode_Decode;
+struct Unicode_Decode
+{
+    U32 inc;
+    U32 codepoint;
+};
+
+global U8 utf8_class[32] = {
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,2,2,2,2,3,3,4,5,
+};
+
 // Note: C-String
 function U64 cstring_length(char *cstr);
 
@@ -50,11 +61,14 @@ function Utf16 utf16(U16 *str, U64 count);
 function Utf32 utf32(U32 *str, U64 count);
 
 // Note: Encoding/Decoding.
-function Codepoint codepoint_from_utf8(U8 *str, U64 max);
-function U32 utf16_from_codepoint(U16 *out, U32 codepoint);
+function Unicode_Decode utf8_decode(U8 *str, U64 max);
+function Unicode_Decode utf16_decode(U16 *str, U64 max);
+function U32 utf8_encode(U8 *str, U32 codepoint);
+function U32 utf16_encode(U16 *str, U32 codepoint);
 
 // Note: Conversion.
-function Utf16 utf16_from_utf8(Arena *arena, Utf8 str8);
+function Utf8 utf8_from_utf16(Arena *arena, Utf16 in);
+function Utf16 utf16_from_utf8(Arena *arena, Utf8 in);
 
 
 #endif // LSW_STRING_H
