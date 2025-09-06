@@ -28,6 +28,11 @@ struct Temporary_Arena
     U64 used;
 };
 
+typedef U16 Arena_Flags;
+enum
+{
+    ARENA_PUSH_NO_ZERO,
+};
 
 
 // Note: Declaration.
@@ -35,9 +40,12 @@ function Arena *arena_alloc(U64 size);
 function void arena_dealloc(Arena *arena);
 function void arena_pop(Arena *arena, U64 size);
 function void arena_clear(Arena *arena);
-function void *push_size(Arena *arena, U64 size);
+function void *_push_size(Arena *arena, U64 size, Arena_Flags flags);
+#define push_size(arena, size) _push_size(arena, size, 0)
+#define push_size_noz(arena, size) _push_size(arena, size, ARENA_PUSH_NO_ZERO)
 #define push_struct(arena, type) ((type *)push_size(arena, sizeof(type)))
 #define push_array(arena, type, count) ((type *)push_size(arena, sizeof(type)*count))
+#define push_array_noz(arena, type, count) ((type *)push_size_noz(arena, sizeof(type)*count))
 #define push_bootstrap(type) (type *)_arena_bootstrap(sizeof(type), offset_of(type, arena))
 
 function Temporary_Arena scratch_begin(void);

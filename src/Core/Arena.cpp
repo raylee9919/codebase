@@ -93,7 +93,7 @@ arena_clear(Arena *arena)
 }
 
 function void *
-push_size(Arena *arena, U64 size)
+_push_size(Arena *arena, U64 size, Arena_Flags flags)
 {
     void *result = NULL;
 
@@ -112,6 +112,11 @@ push_size(Arena *arena, U64 size)
 
         result = new_arena->base;
         new_arena->used += size;
+    }
+
+    if (! (flags & ARENA_PUSH_NO_ZERO))
+    {
+        zero_memory(result, size);
     }
 
     return result;

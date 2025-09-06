@@ -67,8 +67,8 @@ function U32 utf8_encode(U8 *str, U32 codepoint);
 function U32 utf16_encode(U16 *str, U32 codepoint);
 
 // Note: Conversion.
-function Utf8 utf8_from_utf16(Arena *arena, Utf16 in);
-function Utf16 utf16_from_utf8(Arena *arena, Utf8 in);
+function Utf8 to_utf16(Arena *arena, Utf16 in);
+function Utf16 to_utf8(Arena *arena, Utf8 in);
 
 
 #endif // LSW_STRING_H

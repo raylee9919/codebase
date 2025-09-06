@@ -416,7 +416,7 @@ OS_OPEN_FILE(win32_open_file)
 {
     Temporary_Arena scratch = scratch_begin();
 
-    Utf16 path16 = utf16_from_utf8(scratch.arena, path);
+    Utf16 path16 = to_utf16(scratch.arena, path);
 
     DWORD desired_access = 0;
     if (flags & OS_FILE_ACCESS_READ)  

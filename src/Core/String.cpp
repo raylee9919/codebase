@@ -205,13 +205,13 @@ utf16_encode(U16 *str, U32 codepoint)
 // ---------------------------------------
 // Note: Conversion.
 function Utf8
-utf8_from_utf16(Arena *arena, Utf16 in)
+to_utf8(Arena *arena, Utf16 in)
 {
     Utf8 result = {};
     if (in.count)
     {
         U64 cap = in.count*3;
-        U8 *str = push_array(arena, U8, cap + 1);
+        U8 *str = push_array_noz(arena, U8, cap + 1);
         U16 *ptr = in.str;
         U16 *opl = ptr + in.count;
         U64 size = 0;
@@ -229,13 +229,13 @@ utf8_from_utf16(Arena *arena, Utf16 in)
 }
 
 function Utf16
-utf16_from_utf8(Arena *arena, Utf8 in)
+to_utf16(Arena *arena, Utf8 in)
 {
     Utf16 result = {};
     if (in.count)
     {
         U64 cap = in.count*2;
-        U16 *str = push_array(arena, U16, cap + 1);
+        U16 *str = push_array_noz(arena, U16, cap + 1);
         U8 *ptr = in.str;
         U8 *opl = ptr + in.count;
         U64 size = 0;

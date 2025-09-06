@@ -64,7 +64,9 @@ typedef struct { U64 u64[2]; } U128;
 #define memory_copy(dst, src, size) memcpy((dst), (src), (size))
 #define memory_move(dst, src, size) memmove((dst), (src), (size))
 #define memory_set(dst, byte, size) memset((dst), (byte), (size))
-#define memory_zero(ptr, size) memory_set((ptr), 0, (size))
+#define zero_memory(ptr, size) memory_set((ptr), 0, (size))
+#define zero_array(ptr, type, count) memory_set((ptr), 0, sizeof(type)*(count))
+
 
 // ----------------------------------
 // @Note: Doubly-Linked List.
@@ -265,7 +267,6 @@ global const U64 bit61 = (1ull<<60);
 global const U64 bit62 = (1ull<<61);
 global const U64 bit63 = (1ull<<62);
 global const U64 bit64 = (1ull<<63);
-
     
 
 function U16 safe_u16_from_u32(U32 x);
