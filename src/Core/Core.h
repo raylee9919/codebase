@@ -104,14 +104,14 @@ typedef struct { U64 u64[2]; } U128;
 
 #define dar_init(A, ARENA)\
     (A)->arena = ARENA;\
-    (A)->base = (decltype((A)->payload))arena_push(ARENA, sizeof(decltype(*(A)->payload)) * DAR_RESERVE_INIT);\
+    (A)->base = (decltype((A)->payload))push_size(ARENA, sizeof(decltype(*(A)->payload)) * DAR_RESERVE_INIT);\
     (A)->count_cur = 0;\
     (A)->count_max = DAR_RESERVE_INIT
 
 // @Todo: Fragmentation.
 #define dar_push(A, ITEM)\
     if (((A)->count_cur >= (A)->count_max)) {\
-        void *new_base = arena_push((A)->arena, sizeof(decltype(*(A)->payload)) * ((A)->count_max << 1));\
+        void *new_base = push_size((A)->arena, sizeof(decltype(*(A)->payload)) * ((A)->count_max << 1));\
         memory_copy( new_base, (A)->base, sizeof(decltype(*(A)->payload)) * (A)->count_max );\
         (A)->count_max <<= 1;\
     }\
@@ -120,7 +120,7 @@ typedef struct { U64 u64[2]; } U128;
 // Sets the length of an array to at least N.
 #define dar_reserve(A, N)\
     if ((A)->count_max < N) {\
-        void *new_base = arena_push( (A)->arena, sizeof(decltype(*(A)->payload)) * N );\
+        void *new_base = push_size( (A)->arena, sizeof(decltype(*(A)->payload)) * N );\
         memory_copy( new_base, (A)->base, sizeof(decltype(*(A)->payload)) * (A)->count_cur );\
         (A)->count_max = N; \
     }

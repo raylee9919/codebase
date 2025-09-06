@@ -31,7 +31,7 @@ ht_init_internal(Arena *arena, U64 entry_count, U64 entry_size)
     result.arena       = arena;
     result.entry_count = entry_count;
     result.entry_size  = entry_size;
-    result.entries     = (Table_Entry *)arena_push(arena, entry_size*entry_count);
+    result.entries     = (Table_Entry *)push_size(arena, entry_size*entry_count);
     return result;
 }
 

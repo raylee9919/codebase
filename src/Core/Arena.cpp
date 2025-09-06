@@ -93,7 +93,7 @@ arena_clear(Arena *arena)
 }
 
 function void *
-arena_push(Arena *arena, U64 size)
+push_size(Arena *arena, U64 size)
 {
     void *result = NULL;
 
@@ -121,7 +121,7 @@ function void *
 _arena_bootstrap(U64 struct_size, U64 arena_offset)
 {
     Arena *arena = arena_alloc();
-    U8 *result = (U8 *)arena_push(arena, struct_size);
+    U8 *result = (U8 *)push_size(arena, struct_size);
     Arena **actual_arena = ((Arena **)(result + arena_offset));
     *actual_arena = arena;
     return result;

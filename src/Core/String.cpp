@@ -171,7 +171,7 @@ utf16_from_utf8(Arena *arena, Utf8 str)
 {
     U64 max_count = (str.count << 1);
 
-    U16 *str16 = arena_push_array(arena, U16, max_count + 1);
+    U16 *str16 = push_array(arena, U16, max_count + 1);
 
     U8 *src = str.str;
     U16 *dst = str16;

@@ -23,9 +23,8 @@ win32_service_window_proc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
                                               WS_OVERLAPPEDWINDOW | WS_VISIBLE,
                                               CW_USEDEFAULT, CW_USEDEFAULT, param->width, param->height, 
                                               0, 0, win32.hinst, 0);
-
-            result = (LRESULT)window;
             DragAcceptFiles(window, true);
+            result = (LRESULT)window;
         } break;
 
         case WM_DESTROY_DANGEROUS_WINDOW: {
@@ -205,7 +204,7 @@ OS_CREATE_WINDOW(win32_create_window)
 
     HWND window = (HWND)SendMessageW(win32.service_window, WM_CREATE_DANGEROUS_WINDOW, (WPARAM)&param, 0);
 
-    result = arena_push_struct(win32.arena, Os_Window);
+    result = push_struct(win32.arena, Os_Window);
     dll_append(os.window_sentinel, result);
 
     result->handle.u64 = (U64)window;
@@ -279,7 +278,7 @@ OS_CREATE_THREAD(win32_create_thread)
 
     DWORD thread_id;
 
-    Win32_Thread *thread = arena_push_struct(win32.arena, Win32_Thread);
+    Win32_Thread *thread = push_struct(win32.arena, Win32_Thread);
     thread->proc   = proc;
     thread->param  = param;
     thread->handle = CreateThread(0, 0, win32_thread_proc, thread, 0, &thread_id);
@@ -448,7 +447,7 @@ OS_READ_FILE(win32_read_file)
 
     Utf8 result = {};
     {
-        result.str = arena_push_array(arena, U8, size);
+        result.str = push_array(arena, U8, size);
         result.count = size;
     }
 
@@ -506,7 +505,7 @@ win32_init(HINSTANCE hinst)
     win32.arena = arena_alloc();
     win32.hinst = hinst;
 
-    os.window_sentinel = arena_push_struct(win32.arena, Os_Window);
+    os.window_sentinel = push_struct(win32.arena, Os_Window);
     os.window_sentinel->prev = os.window_sentinel;
     os.window_sentinel->next = os.window_sentinel;
 }

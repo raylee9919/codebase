@@ -42,7 +42,7 @@ struct List_Node
 function List_Node *
 list_sentinel_init(Arena *arena, U64 size)
 {
-    List_Node *result = (List_Node *)arena_push(arena, size);
+    List_Node *result = (List_Node *)push_size(arena, size);
     result->next = result;
     result->prev = result;
     return result;
@@ -51,7 +51,7 @@ list_sentinel_init(Arena *arena, U64 size)
 function void *
 _list_alloc_back(Arena *arena, List_Node *sentinel, U64 data_size)
 {
-    List_Node *node = (List_Node *)arena_push(arena, sizeof(*node) + data_size);
+    List_Node *node = (List_Node *)push_size(arena, sizeof(*node) + data_size);
     assume(node);
 
     node->prev = sentinel->prev;
@@ -65,7 +65,7 @@ _list_alloc_back(Arena *arena, List_Node *sentinel, U64 data_size)
 function void *
 _list_alloc_front(Arena *arena, List_Node *sentinel, U64 data_size)
 {
-    List_Node *node = (List_Node *)arena_push(arena, sizeof(*node) + data_size);
+    List_Node *node = (List_Node *)push_size(arena, sizeof(*node) + data_size);
     assume(node);
 
     node->prev = sentinel;
